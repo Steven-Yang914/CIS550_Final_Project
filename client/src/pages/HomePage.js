@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
-import { Container, Divider } from '@mui/material';
+import { useEffect, useState, useRef } from 'react';
+import { Container, Divider, Button } from '@mui/material';
+import TopMoviesTable from '../components/TopMoviesTable';
 // import { NavLink } from 'react-router-dom';
 
 const config = require('../config.json');
@@ -20,6 +21,11 @@ export default function HomePage() {
         </h2>
         <img src={randomMovie.PosterURL} alt={randomMovie.PrimaryTitle} />
       </div>
+
+      <div>
+        <TopMoviesTable />
+      </div>
+      
       <Divider />
     </Container>
   );

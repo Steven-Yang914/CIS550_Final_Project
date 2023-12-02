@@ -49,6 +49,48 @@ const random = async function (req, res) {
   }
 }
 
+const topMovies = async function (req, res) {
+  const page = req.query.page;
+  const pageSize = req.query.page_size ?? 10;
+
+  if (!page) {
+    connection.query(`
+    SELECT *
+    FROM Movies m, Ratings r, Posters p
+    WHERE m.MovieID = r.MovieID
+    AND m.MovieID = p.MovieID
+    AND r.NumVotes > 100000
+    ORDER BY r.AverageRating DESC
+    LIMIT 200;  
+  `, (err, data) => {
+    if (err || data.length === 0) {
+      console.log(err);
+      res.json([]);
+    } else {
+      res.json(data);
+    }
+  });
+  } else {
+    connection.query(`
+    SELECT *
+    FROM Movies m, Ratings r, Posters p
+    WHERE m.MovieID = r.MovieID
+    AND m.MovieID = p.MovieID
+    AND r.NumVotes > 100000
+    ORDER BY r.AverageRating DESC
+    LIMIT ${pageSize} OFFSET ${(page - 1) * pageSize}
+  `, (err, data) => {
+      if (err || data.length === 0) {
+        console.log(err);
+        res.json([]);
+      } else {
+        res.json(data);
+      }
+    });
+  }
+}
+
 module.exports = {
   random,
+  topMovies,
 }
