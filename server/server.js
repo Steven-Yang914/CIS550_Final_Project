@@ -35,3 +35,20 @@ app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
 
+const express = require('express');
+
+// Import routes
+const movieRoutes = require('./routes');
+
+// Middleware to parse JSON bodies
+app.use(express.json());
+
+// Use movie routes
+app.use('/api', movieRoutes);
+
+// Start the server
+app.listen(port, () => {
+  console.log(`Server running on http://localhost:${port}`);
+});
+
+
