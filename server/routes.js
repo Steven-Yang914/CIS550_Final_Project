@@ -93,7 +93,41 @@ const getCollaborationSummary = async function (req, res) {
   );
 };
 
+const getGenreFreqByPpl = async function (req, res) {
+  const peopleID = req.query.peopleID;
+  if (!peopleID || peopleID.substring(0, 2) != 'nm') {
+    return res.status(400).json({ error: "Wrong peopleID format" });
+  }
+
+  connection.query(
+    `
+    SELECT
+      g.Genre,
+      COUNT(*) as Frequency
+    FROM
+      Movies m
+      JOIN Crew_in ci ON m.MovieID = ci.MovieID
+      JOIN ofGenre g ON m.MovieID = g.MovieID
+    WHERE
+      ci.PeopleID = '${peopleID}'
+    GROUP BY
+      g.Genre
+    ORDER BY
+      Frequency DESC;
+  `,
+    (err, data) => {
+      if (err) {
+        console.log("Error: " + err);
+        res.json({});
+      } else {
+        res.json(data);
+      }
+    }
+  );
+};
+
 module.exports = {
   random,
   getCollaborationSummary,
+  getGenreFreqByPpl,
 };
