@@ -97,3 +97,34 @@ module.exports = {
   random,
   getCollaborationSummary,
 };
+
+const express = require('express');
+const router = express.Router();
+
+// Search Movies by Title
+router.get('/searchMovies', (req, res) => {
+    const title = req.query.title;
+    const page = req.query.page || 1;
+    const pageSize = req.query.page_size || 10;
+    // Add logic to query database and return results
+    res.json({ message: "Movies with title " + title });
+});
+
+// Movie Recommendations Based on Genre
+router.get('/recommendations', (req, res) => {
+    const genre = req.query.genre;
+    const limit = req.query.limit || 10;
+    // Add logic to query database and return recommendations
+    res.json({ message: "Recommendations for genre " + genre });
+});
+
+// List Movies Featuring a Specific Actor/Actress
+router.get('/moviesByActor', (req, res) => {
+    const actorName = req.query.actor_name;
+    const page = req.query.page || 1;
+    const pageSize = req.query.page_size || 10;
+    // Add logic to query database and return movies
+    res.json({ message: "Movies featuring " + actorName });
+});
+
+module.exports = router;

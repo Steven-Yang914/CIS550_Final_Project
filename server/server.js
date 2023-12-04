@@ -17,3 +17,21 @@ app.listen(config.server_port, () => {
 });
 
 module.exports = app;
+
+const express = require('express');
+const port = 3000;
+
+// Import routes
+const movieRoutes = require('./routes');
+
+// Middleware to parse JSON bodies
+app.use(express.json());
+
+// Use movie routes
+app.use('/api', movieRoutes);
+
+// Start the server
+app.listen(port, () => {
+  console.log(`Server running on http://localhost:${port}`);
+});
+
