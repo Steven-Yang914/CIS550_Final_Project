@@ -11,6 +11,7 @@ app.use(cors({
 app.get('/random', routes.random);
 app.get('/allMovies', routes.allMovies);
 app.get('/movie/:movie_id', routes.movie);
+app.get('/movie/:movie_id/crew', routes.getCrewOfMovie);
 app.get('/movie/:movie_id/genres', routes.getGenreOfMovie);
 app.get('/topMovies', routes.topMovies);
 app.get('/allPeople', routes.allPeople)

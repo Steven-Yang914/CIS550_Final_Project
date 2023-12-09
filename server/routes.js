@@ -69,10 +69,27 @@ const movie = async function (req, res) {
 
   connection.query(`
     SELECT *
-    FROM Movies m, People p, Crew_in c, Ratings r
+    FROM Movies m, Ratings r, Posters po
+    WHERE m.MovieID = r.MovieID
+    AND m.MovieID = po.MovieID
+    AND m.MovieID = '${movieID}'
+  `, (err, data) => {
+    if (err || data.length === 0) {
+      console.log(err);
+      res.json({});
+    } else {
+      res.json(data[0]);
+    }
+  });
+}
+const getCrewOfMovie = async function (req, res) {
+  const movieID = req.params.movie_id;
+
+  connection.query(`
+    SELECT p.Name, c.Job, c.Characters
+    FROM Movies m, People p, Crew_in c
     WHERE c.MovieID = m.MovieID
     AND c.PeopleID = p.PeopleID
-    AND m.MovieID = r.MovieID
     AND m.MovieID = '${movieID}'
   `, (err, data) => {
     if (err || data.length === 0) {
@@ -180,6 +197,7 @@ module.exports = {
   random,
   allMovies,
   movie,
+  getCrewOfMovie,
   getGenreOfMovie,
   topMovies,
   allPeople,

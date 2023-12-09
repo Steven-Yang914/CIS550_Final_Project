@@ -1,7 +1,8 @@
 import { useEffect, useState, useRef } from 'react';
-import { Container, Divider, Button, Grid } from '@mui/material';
+import { Button, Grid } from '@mui/material';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
+import { NavLink } from 'react-router-dom';
 
 const config = require('../config.json');
 
@@ -28,12 +29,26 @@ function TopMoviesTable() {
           const globalIndex = (currentPage - 1) * moviesPerPage.current + index + 1;
           return (
             <Grid item xs={3} key={movie.MovieID} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <p style={{ textAlign: 'center', maxWidth: '180px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-              {globalIndex}. {movie.PrimaryTitle}
-            </p>
-            <div style={{ marginBottom: '20px' }}>
-              <img src={movie.PosterURL} alt={movie.PrimaryTitle} style={{ width: '180px', height: '200px' }} />
-            </div>
+            <NavLink
+                to={`/movie/${movie.MovieID}`}
+                style={{
+                  textAlign: 'center',
+                  maxWidth: '180px',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                  textDecoration: 'none',
+                  color: '#333',
+                }}
+              >
+                <span>{globalIndex}. </span>
+                {movie.PrimaryTitle}
+            </NavLink>
+            <NavLink to={`/movie/${movie.MovieID}`}>
+              <div style={{ marginBottom: '20px' }}>
+                <img src={movie.PosterURL} alt={movie.PrimaryTitle} style={{ width: '180px', height: '200px' }} />
+              </div>
+            </NavLink>
           </Grid>
           );
         })}
