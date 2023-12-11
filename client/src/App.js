@@ -3,10 +3,11 @@ import { CssBaseline, ThemeProvider } from '@mui/material'
 import { indigo, amber } from '@mui/material/colors'
 import { createTheme } from "@mui/material/styles";
 
+import SearchPage from "./pages/SearchPage";
 import NavBar from './components/NavBar';
 import HomePage from './pages/HomePage';
-import SearchPage from './pages/SearchPage';
 import MovieInfoPage from './pages/MovieInfoPage';
+import SearchResultsPage from "./pages/SearchResultPage";
 
 // createTheme enables you to customize the look and feel of your app past the default
 // in this case, we only change the color scheme
@@ -23,15 +24,17 @@ export const theme = createTheme({
 // NavBar component allowing us to navigate between pages (with hyperlinks)
 export default function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <BrowserRouter>
-        <NavBar />
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/movie/:movie_id" element={<MovieInfoPage />} />
-        </Routes>
-      </BrowserRouter>
-    </ThemeProvider>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <BrowserRouter>
+          <NavBar />
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/movie/:movie_id" element={<MovieInfoPage />} />
+            <Route path="/search" element={<SearchPage />} />
+            <Route path="/search-results" element={<SearchResultsPage />} />
+          </Routes>
+        </BrowserRouter>
+      </ThemeProvider>
   );
 }

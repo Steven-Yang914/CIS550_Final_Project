@@ -10,10 +10,7 @@ const SearchPage = () => {
         <div className="search-page">
             <div className="search-bar-container">
                 <SearchBar setResults = {setResults} />
-                {results && results.length > 0 && <SearchResultsList results={results} />}
             </div>
         </div>
     );
 };
-
-export default SearchPage;

@@ -5,17 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2fab84f3-9660-43cf-a05c-c2c862e75b6c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/client/src/components/MoviesFromRandomDirector.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/pages/SearchPage.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/components/searchbutton.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/pages/SearchResultPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/e178009d-1271-45ac-a253-7c0f0cc0aeaa.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/e178009d-1271-45ac-a253-7c0f0cc0aeaa/storage_v2/_src_/schema/information_schema.FNRwLQ.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/e178009d-1271-45ac-a253-7c0f0cc0aeaa/storage_v2/_src_/schema/mysql.osA4Bg.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/e178009d-1271-45ac-a253-7c0f0cc0aeaa/storage_v2/_src_/schema/performance_schema.kIw0nw.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/e178009d-1271-45ac-a253-7c0f0cc0aeaa/storage_v2/_src_/schema/sys.zb4BAA.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/SearchBar.css" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/SearchBar.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/components/SearchBar.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/SearchBar.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/SearchResults.css" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/SearchResults.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/SearchResultsList.css" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/SearchResultsList.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/SearchResultsList.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/SearchResultsList.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/config.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/pages/SearchPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/SearchPage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/routes.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/routes.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/server.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,35 +37,51 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 3
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3
+}</component>
   <component name="ProjectId" id="2ZNJM90KnTHEXzAZ7mGmJF2U3ME" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "main",
-    "list.type.of.created.stylesheet": "CSS",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.lookFeel",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;SearchPage&quot;,
+    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/Applications/IntelliJ IDEA.app/Contents/plugins/javascript-impl/jsLanguageServicesImpl/external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "mysql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql&quot;
     ]
   }
-}]]></component>
+}</component>
+  <component name="RunManager">
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="CIS550_Final_Project" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="CIS550_Final_Project" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -73,7 +90,8 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1702256554295</updated>
-      <workItem from="1702256555959" duration="11591000" />
+      <workItem from="1702256555959" duration="18910000" />
+      <workItem from="1702334411993" duration="25000" />
     </task>
     <servers />
   </component>
