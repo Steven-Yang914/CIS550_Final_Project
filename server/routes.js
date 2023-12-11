@@ -49,6 +49,70 @@ const random = async function (req, res) {
   }
 }
 
+<<<<<<< Updated upstream
+=======
+const search = async function (req, res) {
+  try {
+    // Extract search query from the request
+    const searchTerm = req.query.searchTerm;           // The search key
+    const requestDataType = req.query.requestDataType; // Specify what type of data is being requested
+    const peopleType = req.query.peopleType;           // Specify what type of people is being requested
+    const genre = req.query.genre;                     // Specify what genre is being requested
+
+    // For simplicity, this example splits the query into words
+    const keywords = searchTerm.split(' '); // Can only take in names and words that don't have symbols other than
+                                            // space
+
+    // Search the movies database/API using the keywords
+    // This is a placeholder function. Replace with your actual search logic.
+    const searchResults = [];
+    for (let i = 0; i < keywords.length; i++) {
+      const keyword = keywords[i].toLowerCase();
+      const searchResult = await searchMoviesDatabase(requestDataType, keyword);
+      searchResults.push(...searchResult);
+    }
+
+    // Send the search results as JSON
+    res.json(searchResults);
+  } catch (error) {
+    // Handle any errors
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
+
+async function searchMoviesDatabase(requestDataType, keyword) {
+  if(keyword) {
+    if (requestDataType === 'movie') {
+      connection.query(`
+      SELECT *
+      FROM Movies 
+      WHERE lower(PrimaryTitle) LIKE lower('%${keyword}%')
+        `, (err, data) => {
+        if (err) {
+          console.log(err);
+          return [];
+        } else {
+          return data;
+        }
+      });
+    }
+  } else if (requestDataType === 'people') {
+    connection.query(`
+      SELECT *
+      FROM People
+      WHERE lower(p.Name) LIKE lower('%${keyword}%')
+    `, (err, data) => {
+      if (err) {
+        console.log(err);
+        return [];
+      } else {
+        return data;
+      }
+    });
+  }
+}
+
+>>>>>>> Stashed changes
 const allMovies = async function (req, res) {
   connection.query(`
     SELECT *

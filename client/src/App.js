@@ -5,6 +5,7 @@ import { createTheme } from "@mui/material/styles";
 
 import NavBar from './components/NavBar';
 import HomePage from './pages/HomePage';
+import SearchPage from './pages/SearchPage';
 import MovieInfoPage from './pages/MovieInfoPage';
 
 // createTheme enables you to customize the look and feel of your app past the default
