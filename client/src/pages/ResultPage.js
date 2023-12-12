@@ -8,7 +8,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Card from "@mui/material/Paper";
-import LinkWithSearchParams from "../components/LinkWithSearchParams";
+import LinkWithCrewInfo from "../components/LinkWithCrewInfo";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import { Link } from "react-router-dom";
@@ -17,7 +17,7 @@ const config = require("../config.json");
 
 function ResultPage() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const peopleIDs = searchParams.get("peopleIDs");
+  const peopleIDs = searchParams.get("chosen-crew");
   const peopleIDList = peopleIDs.split(",");
   const [collaborations, setCollaborations] = useState([]);
   const [peopleInfos, setPeopleInfos] = useState({});
@@ -84,16 +84,16 @@ function ResultPage() {
               >
                 <TableCell align="right">
                   {
-                    <LinkWithSearchParams to={`/person/${row.ActorID1}`}>
+                    <LinkWithCrewInfo to={`/person/${row.ActorID1}`}>
                       {peopleInfos[row.ActorID1].Name}
-                    </LinkWithSearchParams>
+                    </LinkWithCrewInfo>
                   }
                 </TableCell>
                 <TableCell align="right">
                   {
-                    <LinkWithSearchParams to={`/person/${row.ActorID2}`}>
+                    <LinkWithCrewInfo to={`/person/${row.ActorID2}`}>
                       {peopleInfos[row.ActorID2].Name}
-                    </LinkWithSearchParams>
+                    </LinkWithCrewInfo>
                   }
                 </TableCell>
                 <TableCell align="right">
