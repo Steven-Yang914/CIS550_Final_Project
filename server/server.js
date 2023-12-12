@@ -11,7 +11,13 @@ app.use(
 );
 
 app.get("/random", routes.random);
-
+app.get("/allMovies", routes.allMovies);
+app.get("/movie/:movie_id", routes.movie);
+app.get("/movie/:movie_id/crew", routes.getCrewOfMovie);
+app.get("/movie/:movie_id/genres", routes.getGenreOfMovie);
+app.get("/topMovies", routes.topMovies);
+app.get("/allPeople", routes.allPeople);
+app.get("/person/:person_id", routes.person);
 app.get("/result/collaboration-summary", routes.getCollaborationSummary);
 app.get("/result/genre-freq", routes.getGenreFreqByPpl);
 
@@ -22,38 +28,3 @@ app.listen(config.server_port, () => {
 });
 
 module.exports = app;
-
-const express = require('express');
-const port = 3000;
-
-// Import routes
-const movieRoutes = require('./routes');
-
-// Middleware to parse JSON bodies
-app.use(express.json());
-
-// Use movie routes
-app.use('/api', movieRoutes);
-
-// Start the server
-app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
-});
-
-const express = require('express');
-
-// Import routes
-const movieRoutes = require('./routes');
-
-// Middleware to parse JSON bodies
-app.use(express.json());
-
-// Use movie routes
-app.use('/api', movieRoutes);
-
-// Start the server
-app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
-});
-
-

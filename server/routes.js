@@ -126,39 +126,190 @@ const getGenreFreqByPpl = async function (req, res) {
   );
 };
 
+const allMovies = async function (req, res) {
+  connection.query(`
+    SELECT *
+    FROM Movies
+    ORDER BY StartYear DESC
+  `, (err, data) => {
+    if (err || data.length === 0) {
+      console.log(err);
+      res.json([]);
+    } else {
+      res.json(data);
+    }
+  });
+}
+
+const movie = async function (req, res) {
+  const movieID = req.params.movie_id;
+
+  connection.query(`
+    SELECT *
+    FROM Movies m, Ratings r, Posters po
+    WHERE m.MovieID = r.MovieID
+    AND m.MovieID = po.MovieID
+    AND m.MovieID = '${movieID}'
+  `, (err, data) => {
+    if (err || data.length === 0) {
+      console.log(err);
+      res.json({});
+    } else {
+      res.json(data[0]);
+    }
+  });
+}
+const getCrewOfMovie = async function (req, res) {
+  const movieID = req.params.movie_id;
+
+  connection.query(`
+    SELECT p.Name, c.Job, c.Characters
+    FROM Movies m, People p, Crew_in c
+    WHERE c.MovieID = m.MovieID
+    AND c.PeopleID = p.PeopleID
+    AND m.MovieID = '${movieID}'
+  `, (err, data) => {
+    if (err || data.length === 0) {
+      console.log(err);
+      res.json([]);
+    } else {
+      res.json(data);
+    }
+  });
+}
+
+const topMovies = async function (req, res) {
+  const page = req.query.page;
+  const pageSize = req.query.page_size ?? 10;
+
+  if (!page) {
+    connection.query(`
+    SELECT *
+    FROM Movies m, Ratings r, Posters p
+    WHERE m.MovieID = r.MovieID
+    AND m.MovieID = p.MovieID
+    AND r.NumVotes > 100000
+    ORDER BY r.AverageRating DESC
+    LIMIT 200;  
+  `, (err, data) => {
+    if (err || data.length === 0) {
+      console.log(err);
+      res.json([]);
+    } else {
+      res.json(data);
+    }
+  });
+  } else {
+    connection.query(`
+    SELECT *
+    FROM Movies m, Ratings r, Posters p
+    WHERE m.MovieID = r.MovieID
+    AND m.MovieID = p.MovieID
+    AND r.NumVotes > 100000
+    ORDER BY r.AverageRating DESC
+    LIMIT ${pageSize} OFFSET ${(page - 1) * pageSize}
+  `, (err, data) => {
+      if (err || data.length === 0) {
+        console.log(err);
+        res.json([]);
+      } else {
+        res.json(data);
+      }
+    });
+  }
+}
+
+const allPeople = async function (req, res) {
+  connection.query(`
+    SELECT *
+    FROM People
+    ORDER BY Name ASC
+  `, (err, data) => {
+    if (err || data.length === 0) {
+      console.log(err);
+      res.json([]);
+    } else {
+      res.json(data);
+    }
+  });
+}
+
+const person = async function (req, res) {
+  const personID = req.params.person_id;
+
+  connection.query(`
+    SELECT *
+    FROM Movies m, People p, Crew_in c
+    WHERE c.MovieID = m.MovieID AND c.PeopleID = p.PeopleID
+    AND p.PeopleID = '${personID}'
+  `, (err, data) => {
+    if (err || data.length === 0) {
+      console.log(err);
+      res.json([]);
+    } else {
+      res.json(data);
+    }
+  });
+}
+
+const getGenreOfMovie = async function (req, res) {
+  const movieID = req.params.movie_id;
+
+  connection.query(`
+    SELECT og.Genre
+    FROM Movies m, ofGenre og
+    WHERE m.MovieID = og.MovieID
+    AND m.MovieID = '${movieID}'
+  `, (err, data) => {
+    if (err || data.length === 0) {
+      console.log(err);
+      res.json([]);
+    } else {
+      res.json(data);
+    }
+  });
+}
+
 module.exports = {
   random,
   getCollaborationSummary,
   getGenreFreqByPpl,
+  allMovies,
+  movie,
+  getCrewOfMovie,
+  getGenreOfMovie,
+  topMovies,
+  allPeople,
+  person,
 };
 
-const express = require('express');
-const router = express.Router();
+// const express = require('express');
+// const router = express.Router();
 
-// Search Movies by Title
-router.get('/searchMovies', (req, res) => {
-    const title = req.query.title;
-    const page = req.query.page || 1;
-    const pageSize = req.query.page_size || 10;
-    // Add logic to query database and return results
-    res.json({ message: "Movies with title " + title });
-});
+// // Search Movies by Title
+// router.get('/searchMovies', (req, res) => {
+//     const title = req.query.title;
+//     const page = req.query.page || 1;
+//     const pageSize = req.query.page_size || 10;
+//     // Add logic to query database and return results
+//     res.json({ message: "Movies with title " + title });
+// });
 
-// Movie Recommendations Based on Genre
-router.get('/recommendations', (req, res) => {
-    const genre = req.query.genre;
-    const limit = req.query.limit || 10;
-    // Add logic to query database and return recommendations
-    res.json({ message: "Recommendations for genre " + genre });
-});
+// // Movie Recommendations Based on Genre
+// router.get('/recommendations', (req, res) => {
+//     const genre = req.query.genre;
+//     const limit = req.query.limit || 10;
+//     // Add logic to query database and return recommendations
+//     res.json({ message: "Recommendations for genre " + genre });
+// });
 
-// List Movies Featuring a Specific Actor/Actress
-router.get('/moviesByActor', (req, res) => {
-    const actorName = req.query.actor_name;
-    const page = req.query.page || 1;
-    const pageSize = req.query.page_size || 10;
-    // Add logic to query database and return movies
-    res.json({ message: "Movies featuring " + actorName });
-});
+// // List Movies Featuring a Specific Actor/Actress
+// router.get('/moviesByActor', (req, res) => {
+//     const actorName = req.query.actor_name;
+//     const page = req.query.page || 1;
+//     const pageSize = req.query.page_size || 10;
+//     // Add logic to query database and return movies
+//     res.json({ message: "Movies featuring " + actorName });
+// });
 
-module.exports = router;
+// module.exports = router;
