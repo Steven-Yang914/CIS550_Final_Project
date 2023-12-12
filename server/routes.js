@@ -252,6 +252,23 @@ const person = async function (req, res) {
   });
 }
 
+const getPersonInfo = async function (req, res) {
+  const personID = req.params.person_id;
+
+  connection.query(`
+    SELECT *
+    FROM People p
+    WHERE p.PeopleID = '${personID}'
+  `, (err, data) => {
+    if (err || data.length === 0) {
+      console.log(err);
+      res.json([]);
+    } else {
+      res.json(data);
+    }
+  });
+}
+
 const getGenreOfMovie = async function (req, res) {
   const movieID = req.params.movie_id;
 
@@ -281,6 +298,7 @@ module.exports = {
   topMovies,
   allPeople,
   person,
+  getPersonInfo,
 };
 
 // const express = require('express');

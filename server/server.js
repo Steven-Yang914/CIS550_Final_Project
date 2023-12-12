@@ -20,6 +20,7 @@ app.get("/allPeople", routes.allPeople);
 app.get("/person/:person_id", routes.person);
 app.get("/result/collaboration-summary", routes.getCollaborationSummary);
 app.get("/result/genre-freq", routes.getGenreFreqByPpl);
+app.get("/personInfo/:person_id", routes.getPersonInfo);
 
 app.listen(config.server_port, () => {
   console.log(
