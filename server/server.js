@@ -19,7 +19,8 @@ app.get("/topMovies", routes.topMovies);
 app.get("/allPeople", routes.allPeople);
 app.get("/person/:person_id", routes.person);
 app.get("/result/collaboration-summary", routes.getCollaborationSummary);
-app.get("/result/genre-freq", routes.getGenreFreqByPpl);
+app.get("/result/genre-freq/:person_id", routes.getGenreFreqByPpl);
+app.get("/result/job-freq/:person_id", routes.getJobFreqByPpl)
 app.get("/personInfo/:person_id", routes.getPersonInfo);
 
 app.listen(config.server_port, () => {
