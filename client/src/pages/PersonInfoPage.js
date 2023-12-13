@@ -6,73 +6,98 @@ import LinkWithCrewInfo from "../components/LinkWithCrewInfo";
 const config = require('../config.json');
 
 function PeopleInfoPage() {
-  const {person_id} = useParams();
-  const [personInfo, setPersonInfo] = useState({});
-  const [relatedMovies, setRelatedMovies] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
-  console.log(person_id);
+    const { person_id } = useParams();
+    const [personInfo, setPersonInfo] = useState({});
+    const [relatedMovies, setRelatedMovies] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
+    console.log(person_id);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Get general info of the person
-        let response = await fetch(`http://${config.server_host}:${config.server_port}/personInfo/${person_id}`);
-        let data = await response.json();
-        setPersonInfo(data[0]);
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                // Get general info of the person
+                let response = await fetch(`http://${config.server_host}:${config.server_port}/personInfo/${person_id}`);
+                let data = await response.json();
+                setPersonInfo(data[0]);
 
-        // Get movies related to the person
-        response = await fetch(`http://${config.server_host}:${config.server_port}/person/${person_id}`);
-        data = await response.json();
-        console.log(data);
-        setRelatedMovies(data);
-      } catch (err) {
-        console.error("Error fetching data:", err);
-        setError(err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+                // Get movies related to the person
+                response = await fetch(`http://${config.server_host}:${config.server_port}/person/${person_id}`);
+                data = await response.json();
+                console.log(data);
+                setRelatedMovies(data);
+            } catch (err) {
+                console.error("Error fetching data:", err);
+                setError(err);
+            } finally {
+                setIsLoading(false);
+            }
+        };
 
-    fetchData();
-  }, [person_id]);
+        fetchData();
+    }, [person_id]);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
 
-  if (error) {
-    return <div>Error loading data.</div>;
-  }
+    if (error) {
+        return <div>Error loading data.</div>;
+    }
 
-  const { Name, BirthYear, DeathYear, Role } = personInfo;
+    const { Name, BirthYear, DeathYear, Role } = personInfo;
 
-  return (
-    <Container>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>
-                <Typography variant="h3">{Name}</Typography>
-              </TableCell>
-              <TableCell>
-                <Button variant="contained">
-                  <LinkWithCrewInfo to={`/result`}>
-                    Add
-                  </LinkWithCrewInfo>
-                </Button>
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {/* ... existing TableRows ... */}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Container>
-  );
+    return (
+        <Container>
+            <TableContainer component={Paper}>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>
+                                <Typography variant="h3">{Name}</Typography>
+                            </TableCell>
+                            <TableCell>
+                                <Button variant="contained">
+                                    <LinkWithCrewInfo to={`/result`}>
+                                        Add
+                                    </LinkWithCrewInfo>
+                                </Button>
+                            </TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        <TableRow>
+                            <TableCell><strong style={{ fontSize: '16px' }}>Role:</strong> {Role}</TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell><strong style={{ fontSize: '16px' }}>Birth Year:</strong> {BirthYear}</TableCell>
+                        </TableRow>
+                        {DeathYear && 
+                            <TableRow>
+                                <TableCell><strong style={{ fontSize: '16px' }}>Death Year:</strong> {DeathYear}</TableCell>
+                            </TableRow>
+                        }
+                        {relatedMovies.length > 0 && 
+                            <TableRow>
+                                <TableCell>
+                                    <strong style={{ fontSize: '16px' }}>Related Movies:</strong> 
+                                    {relatedMovies.map((movie, index) => (
+                                        <div key={index}>
+                                            <LinkWithCrewInfo style={{ textDecoration: 'none', color: 'blue', fontWeight: 'bold' }}>
+                                                {movie.Title} ({movie.Year})
+                                            </LinkWithCrewInfo>
+                                        </div>
+                                    ))}
+                                </TableCell>
+                            </TableRow>
+                        }
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        </Container>
+    );
 }
 
 export default PeopleInfoPage;
+
 
