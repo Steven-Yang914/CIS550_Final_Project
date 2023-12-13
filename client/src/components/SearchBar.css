@@ -12,8 +12,8 @@
 .search-bar-container {
     display: flex;
     justify-content: center;
-    align-items: center;
-    height: 100vh; /* This will make the container take the full height of the viewport */
+    align-items: flex-start; /* Align items at the start of the container */
+    padding-top: 20px; /* Add some padding at the top */
 }
 
 input {
@@ -24,6 +24,12 @@ input {
     width: 100%;
     margin-left: 5px;
     text-align: center;
+}
+
+.input-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 input:focus {

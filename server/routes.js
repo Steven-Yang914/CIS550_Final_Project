@@ -49,70 +49,175 @@ const random = async function (req, res) {
   }
 }
 
-<<<<<<< Updated upstream
-=======
 const search = async function (req, res) {
-  try {
-    // Extract search query from the request
-    const searchTerm = req.query.searchTerm;           // The search key
-    const requestDataType = req.query.requestDataType; // Specify what type of data is being requested
-    const peopleType = req.query.peopleType;           // Specify what type of people is being requested
-    const genre = req.query.genre;                     // Specify what genre is being requested
-
-    // For simplicity, this example splits the query into words
-    const keywords = searchTerm.split(' '); // Can only take in names and words that don't have symbols other than
-                                            // space
-
-    // Search the movies database/API using the keywords
-    // This is a placeholder function. Replace with your actual search logic.
-    const searchResults = [];
-    for (let i = 0; i < keywords.length; i++) {
-      const keyword = keywords[i].toLowerCase();
-      const searchResult = await searchMoviesDatabase(requestDataType, keyword);
-      searchResults.push(...searchResult);
-    }
-
+  // Extract search query from the request
+  const searchTerm = req.query.searchTerm.trim();           // The search key
+  const requestDataType = req.query.requestDataType.trim(); // Specify what type of data is being requested
+  // For simplicity, this example splits the query into words
+  // Search the movies database/API using the keywords
+  // This is a placeholder function. Replace with your actual search logic.
+  const searchResult = await searchDatabase(requestDataType, searchTerm);
+  if (Array.isArray(searchResult) && searchResult.length > 0) {
     // Send the search results as JSON
-    res.json(searchResults);
-  } catch (error) {
-    // Handle any errors
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.json(searchResult);
+  } else {
+    res.json([]);
   }
 }
+//   } catch (error) {
+//     // Handle any errors
+//     res.status(500).json({ error: 'Internal Server Error' });
+//   }
+// }
 
-async function searchMoviesDatabase(requestDataType, keyword) {
-  if(keyword) {
-    if (requestDataType === 'movie') {
-      connection.query(`
-      SELECT *
-      FROM Movies 
-      WHERE lower(PrimaryTitle) LIKE lower('%${keyword}%')
-        `, (err, data) => {
-        if (err) {
-          console.log(err);
-          return [];
-        } else {
-          return data;
-        }
-      });
-    }
-  } else if (requestDataType === 'people') {
-    connection.query(`
-      SELECT *
-      FROM People
-      WHERE lower(p.Name) LIKE lower('%${keyword}%')
-    `, (err, data) => {
-      if (err) {
-        console.log(err);
-        return [];
-      } else {
-        return data;
+function searchDatabase(requestDataType, keyword) {
+  return new Promise((resolve, reject) => {
+    if(keyword) {
+      if (requestDataType === 'movie') {
+        connection.query(`WITH GoodMovies AS ( 
+            SELECT *
+            FROM Movies m 
+            WHERE lower(PrimaryTitle) LIKE ? AND
+                  m.MovieID IS NOT NULL
+            )
+          SELECT gm.*, r.*, po.PosterURL
+          FROM GoodMovies gm JOIN Ratings r on gm.MovieID = r.MovieID 
+              LEFT JOIN Posters po on gm.MovieID = po.MovieID`,
+            [`%${keyword}%`],
+            (err, data) => {
+              if (err) {
+                console.log(err);
+                reject('There was an error querying the database.');
+              } else {
+                console.log(data)
+                resolve(data);
+              }
+            }
+        );
       }
-    });
-  }
+      else if (requestDataType === 'person') {
+        connection.query(`
+        SELECT *
+        FROM People
+        WHERE lower(Name) LIKE lower('%${keyword}%') AND
+          People.PeopleID IS NOT NULL`,
+            (err, data) => {
+              if (err) {
+                console.log(err);
+                reject('There was an error querying the database.');
+              } else {
+                resolve(data);
+              }
+            }
+        );
+      }
+    } else {
+      resolve([]);
+    }
+  });
 }
 
->>>>>>> Stashed changes
+const randomDirector = async function (req, res) {
+  connection.query(`
+WITH randomID AS (
+SELECT PeopleID
+FROM Crew_in
+WHERE Job = 'director'
+ORDER BY RAND()
+Limit 1
+),
+    IDCi as (
+    SELECT ri.PeopleID, ci.MovieID
+    FROM randomID ri
+    JOIN Crew_in ci on ri.PeopleID = ci.PeopleID
+),
+    DirectorIDs AS (
+    SELECT p.*, ic.MovieID
+    FROM IDCi ic JOIN People p
+        on ic.PeopleID = p.PeopleID
+     )
+  SELECT m.*, d.Name as Director
+  FROM DirectorIDs d JOIN
+       Movies m ON d.MovieID = m.MovieID;
+      `, (err, data) => {
+    if (err || data.length === 0) {
+        console.log(err);
+        res.json({});
+    } else {
+      console.log("random director's movies: ", data);
+      res.json(data);
+    }
+  });
+}
+
+
+// function searchDatabase(requestDataType, keyword) {
+//   if(keyword) {
+//     if (requestDataType === 'movie') {
+//       connection.query(`
+//         SELECT *
+//         FROM Movies
+//         WHERE lower(PrimaryTitle) LIKE lower('%${keyword}%')`,
+//           (err, data) => {
+//             if (err) {
+//               console.log(err);
+//               return [];
+//             } else {
+//               console.log(data);
+//               return data;
+//             }
+//           }
+//       );
+//     } else if (requestDataType === 'person') {
+//       connection.query(`
+//         SELECT *
+//         FROM People
+//         WHERE lower(Name) LIKE lower('%${keyword}%')`,
+//             [keyword + '%'],
+//           (err, data) => {
+//             if (err) {
+//               console.log(err);
+//               return [];
+//             } else {
+//               return data;
+//             }
+//           }
+//       );
+//     }
+//   }
+// }
+// async function searchMoviesDatabase(requestDataType, keyword) {
+//   if(keyword) {
+//     if (requestDataType === 'movie') {
+//       connection.query(`
+//       SELECT *
+//       FROM Movies
+//       WHERE lower(PrimaryTitle) LIKE lower('%${keyword}%')
+//         `, (err, data) => {
+//         if (err) {
+//           console.log(err);
+//           return [];
+//         } else {
+//           return data;
+//         }
+//       });
+//     }
+//   } else if (requestDataType === 'people') {
+//     connection.query
+//       SELECT *
+//       FROM People
+//       WHERE lower(p.Name) LIKE lower('%${keyword}%')
+//     `, (err, data) => {
+//       if (err) {
+//         console.log(err);
+//         return [];
+//       } else {
+//         return data;
+//       }
+//     });
+//   }
+// }
+
 const allMovies = async function (req, res) {
   connection.query(`
     SELECT *
@@ -156,6 +261,26 @@ const getCrewOfMovie = async function (req, res) {
     AND c.PeopleID = p.PeopleID
     AND m.MovieID = '${movieID}'
   `, (err, data) => {
+    if (err || data.length === 0) {
+      console.log(err);
+      res.json([]);
+    } else {
+      res.json(data);
+    }
+  });
+}
+
+const topMoviesByGenre = async function (req, res) {
+  connection.query(`WITH MaxRatings AS (
+    SELECT og2.Genre, MAX(r2.AverageRating) AS MaxAvgRating
+    FROM Ratings r2
+    JOIN ofGenre og2 on r2.MovieID = og2.MovieID
+    GROUP BY og2.Genre
+    )
+    SELECT rr.AverageRating, mrr.Genre,  mm.*
+    FROM Ratings rr JOIN MaxRatings mrr
+    on rr.AverageRating = mrr.MaxAvgRating
+    JOIN Movies mm on mm.MovieID = rr.MovieID;`, (err, data) => {
     if (err || data.length === 0) {
       console.log(err);
       res.json([]);
@@ -266,4 +391,7 @@ module.exports = {
   topMovies,
   allPeople,
   person,
+  search,
+  topMoviesByGenre,
+  randomDirector
 }

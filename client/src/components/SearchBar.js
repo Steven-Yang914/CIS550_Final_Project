@@ -1,31 +1,61 @@
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import {FaSearch} from "react-icons/fa";
 import {Button} from "@mui/material";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./SearchBar.css";
+import SearchContext from "./SearchContext";
 
-export const SearchBar = ({setResults}) => {
+const config = require('../config.json');
+
+export const SearchBar = () => {
     const [input, setInput] = useState("");
-    const history = useHistory();
+    const [searchType, setSearchType] = useState("Movie");
+    const navigate = useNavigate();
+    const { results, setResults, isLoading, setIsLoading } = useContext(SearchContext);
 
     const fetchData = () => {
         if (input) {
-            fetch(`http://${config.server_host}:${config.server_port}/search?searchTerm=${input}&requestDataType=movie`)
+            // Set isLoading to true before making the fetch request
+            setIsLoading(true);
+
+            fetch(`http://${config.server_host}:${config.server_port}/search/results?searchTerm=${input}&requestDataType=${searchType.toLowerCase()}`)
                 .then((response) => response.json())
                 .then((json) => {
                     setResults(json);
-                    history.push('/search/results');
+                    // Set isLoading to false after the results have been set
+                    setIsLoading(false);
+                    navigate(`/search/results?searchTerm=${input}&requestDataType=${searchType.toLowerCase()}`);
                 });
         }
     };
+
+    // const fetchData = () => {
+    //     if (input) {
+    //         console.log('input: ', input);
+    //         fetch(`http://${config.server_host}:${config.server_port}/search/results?searchTerm=${input}
+    //         &requestDataType=${searchType.toLowerCase()}`)
+    //             .then((response) => response.json())
+    //             .then((json) => {
+    //                 console.log('JSON response:', json);
+    //                 setResults(json);
+    //                 // Include the input as a parameter in the URL
+    //                 navigate(`/search/results?searchTerm=${input}&requestDataType=${searchType.toLowerCase()}`);
+    //             });
+    //     }
+    // };
 
     const handleChanges = (value) => {
         setInput(value);
     }
 
+    const toggleSearchType = () => {
+        setSearchType(prevType => prevType === "Movie" ? "Person" : "Movie");
+    }
+
     return (
         <div className="Input-wrapper">
             <div className="input-container">
+                <Button onClick={toggleSearchType}>{searchType}</Button>
                 <input
                     placeholder="Type here to search..."
                     value = {input}
@@ -51,7 +81,7 @@ export const SearchBar = ({setResults}) => {
 //
 //     const fetchData = () => {
 //         if (input) {
-//             fetch(`http://${config.server_host}:${config.server_port}/search?searchTerm=${input}&requestDataType=movie`)
+//             fetch(http://${config.server_host}:${config.server_port}/search?searchTerm=${input}&requestDataType=movie)
 //                 .then((response) => response.json())
 //                 .then((json) => {
 //                     setResults(json);
@@ -88,7 +118,7 @@ export const SearchBar = ({setResults}) => {
 //     const [searchType, setSearchType] = useState("Movie");
 //
 //     const fetchData = (value) => {
-//         fetch(`http://${config.server_host}:${config.server_port}/search?searchTerm=${value}&requestDataType=${searchType.toLowerCase()}`)
+//         fetch(http://${config.server_host}:${config.server_port}/search?searchTerm=${value}&requestDataType=${searchType.toLowerCase()})
 //             .then((response) => response.json())
 //             .then((json) => {
 //                 setResults(json);
@@ -124,7 +154,7 @@ export const SearchBar = ({setResults}) => {
 //             <div className="input-container">
 //                 <Button onClick={toggleSearchType}>{searchType}</Button>
 //                 <input
-//                     placeholder={`Type here to search for a ${searchType.toLowerCase()}...`}
+//                     placeholder={Type here to search for a ${searchType.toLowerCase()}...}
 //                     value = {input}
 //                     onChange={(e) => handleChanges(e.target.value)}
 //                 />

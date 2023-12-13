@@ -1,16 +1,26 @@
+import React, { useState, useEffect } from 'react';
+import TopAvgRateMoviesTable from '../components/TopAvgRateMoviesTable';
+import RandomDirectorMovies from '../components/RandomDirectorMovies';
 import {SearchBar} from "../components/SearchBar";
-import {SearchResultsList} from "../components/SearchResultsList";
+import TopMoviesTable from "../components/TopMoviesTable";
 
-import React, { useState } from 'react';
+function SearchPage() {
+    const [showTopMovies, setShowTopMovies] = useState(false);
 
-const SearchPage = () => {
-    const [results, setResults] =  useState([]);
+    useEffect(() => {
+        // Generate a random boolean
+        const randomBoolean = Math.random() < 0.5;
+        setShowTopMovies(randomBoolean);
+    }, []);
 
     return (
         <div className="search-page">
             <div className="search-bar-container">
-                <SearchBar setResults = {setResults} />
+                <SearchBar />
             </div>
+            {showTopMovies ? <TopAvgRateMoviesTable /> : <RandomDirectorMovies />}
         </div>
     );
-};
+}
+
+export default SearchPage;

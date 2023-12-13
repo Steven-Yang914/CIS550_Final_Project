@@ -17,6 +17,8 @@ app.get('/topMovies', routes.topMovies);
 app.get('/allPeople', routes.allPeople)
 app.get('/person/:person_id', routes.person);
 app.get('/search/results', routes.search);
+app.get('/genre/top-movies', routes.topMoviesByGenre);
+app.get('/director/random', routes.randomDirector);
 
 app.listen(config.server_port, () => {
   console.log(`Server running at http://${config.server_host}:${config.server_port}/`)
