@@ -11,10 +11,6 @@ import ResultPage from './pages/ResultPage';
 import PeoplePage from './pages/People';
 // Import additional components if you have created separate pages for them
 
-<Routes>
-  <Route path="/" element={<HomePage />} />
-  <Route path="/people" element={<PeoplePage />} />
-</Routes>
 
 export const theme = createTheme({
   palette: {

@@ -189,7 +189,7 @@ const getCrewOfMovie = async function (req, res) {
   const movieID = req.params.movie_id;
 
   connection.query(`
-    SELECT p.Name, c.Job, c.Characters
+    SELECT p.Name, c.Job, c.Characters, p.PeopleID
     FROM Movies m, People p, Crew_in c
     WHERE c.MovieID = m.MovieID
     AND c.PeopleID = p.PeopleID
