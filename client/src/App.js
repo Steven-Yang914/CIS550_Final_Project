@@ -11,7 +11,8 @@ import SearchResultsPage from "./pages/SearchResultPage";
 import React, { useContext } from 'react';
 import SearchContext from './components/SearchContext';
 import {SearchProvider} from "./components/SearchProvider";
-
+import PersonInfoPage from "./pages/PersonInfoPage";
+import ResultPage from './pages/ResultPage';
 
 // createTheme enables you to customize the look and feel of your app past the default
 // in this case, we only change the color scheme
@@ -36,10 +37,23 @@ export default function App() {
                 <Routes>
                  <Route path="/" element={<HomePage />} />
                     <Route path="/movie/:movie_id" element={<MovieInfoPage />} />
-                    <Route path="/search" element={<SearchPage />} />
                 </Routes>
             </SearchProvider>
         </BrowserRouter>
       </ThemeProvider>
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <BrowserRouter>
+        <NavBar />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/movie/:movie_id" element={<MovieInfoPage />} />
+          <Route path="/person/:person_id" element={<PersonInfoPage />} />
+          <Route path="/result" element={<ResultPage />} />
+          <Route path="/search" element={<SearchPage />} />
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
