@@ -5,7 +5,7 @@ import LinkWithCrewInfo from "../components/LinkWithCrewInfo";
 
 const config = require('../config.json');
 
-function PeopleInfoPage() {
+function PersonInfoPage() {
     const { person_id } = useParams();
     const [personInfo, setPersonInfo] = useState({});
     const [relatedMovies, setRelatedMovies] = useState([]);
@@ -45,7 +45,8 @@ function PeopleInfoPage() {
         return <div>Error loading data.</div>;
     }
 
-    const { Name, BirthYear, DeathYear, Role } = personInfo;
+    const { Name, BirthYear, DeathYear } = personInfo;
+    console.log(personInfo);
 
     return (
         <Container>
@@ -67,16 +68,17 @@ function PeopleInfoPage() {
                     </TableHead>
                     <TableBody>
                         <TableRow>
-                            <TableCell><strong style={{ fontSize: '16px' }}>Role:</strong> {Role}</TableCell>
-                        </TableRow>
-                        <TableRow>
                             <TableCell><strong style={{ fontSize: '16px' }}>Birth Year:</strong> {BirthYear}</TableCell>
                         </TableRow>
-                        {DeathYear && 
+                        {DeathYear && (
                             <TableRow>
-                                <TableCell><strong style={{ fontSize: '16px' }}>Death Year:</strong> {DeathYear}</TableCell>
+                                <TableCell>
+                                    { (!DeathYear || DeathYear === 0) 
+                                        ? <strong style={{ fontSize: '16px' }}>Death Year: Alive</strong> 
+                                        : <strong style={{ fontSize: '16px' }}>Death Year: {DeathYear}</strong> }
+                                </TableCell>
                             </TableRow>
-                        }
+                        )}
                         {relatedMovies.length > 0 && 
                             <TableRow>
                                 <TableCell>
@@ -84,7 +86,7 @@ function PeopleInfoPage() {
                                     {relatedMovies.map((movie, index) => (
                                         <div key={index}>
                                             <LinkWithCrewInfo to={`/movie/${movie.MovieID}`} style={{ textDecoration: 'none', color: 'blue', fontWeight: 'bold' }}>
-                                                {movie.Title} ({movie.Year})
+                                                {movie.PrimaryTitle} ({movie.Year}) (Role: {movie.Job})
                                             </LinkWithCrewInfo>
                                         </div>
                                     ))}
@@ -95,9 +97,9 @@ function PeopleInfoPage() {
                 </Table>
             </TableContainer>
         </Container>
-    );
-}
+    );    
 
-export default PeopleInfoPage;
+  }
 
+  export default PersonInfoPage;
 

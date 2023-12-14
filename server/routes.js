@@ -281,7 +281,7 @@ const person = async function (req, res) {
   const personID = req.params.person_id;
 
   connection.query(`
-      SELECT m.MovieID, m.Title, m.StartYear AS Year
+      SELECT m.MovieID, m.PrimaryTitle, m.StartYear AS Year, c.Job
       FROM Movies m
       JOIN Crew_in c ON m.MovieID = c.MovieID
       WHERE c.PeopleID = '${personID}'
@@ -300,7 +300,7 @@ const getPersonInfo = async function (req, res) {
   const personID = req.params.person_id;
 
   connection.query(`
-    SELECT *
+    SELECT p.Name, p.*
     FROM People p
     WHERE p.PeopleID = '${personID}'
   `, (err, data) => {
