@@ -1,72 +1,57 @@
-import React, {useContext, useState} from "react";
-import {FaSearch} from "react-icons/fa";
-import {Button} from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import "./SearchBar.css";
-import SearchContext from "./SearchContext";
-
-const config = require('../config.json');
-
-export const SearchBar = () => {
-    const [input, setInput] = useState("");
-    const [searchType, setSearchType] = useState("Movie");
-    const navigate = useNavigate();
-    const { results, setResults, isLoading, setIsLoading } = useContext(SearchContext);
-
-    const fetchData = () => {
-        if (input) {
-            // Set isLoading to true before making the fetch request
-            setIsLoading(true);
-
-            fetch(`http://${config.server_host}:${config.server_port}/search/results?searchTerm=${input}&requestDataType=${searchType.toLowerCase()}`)
-                .then((response) => response.json())
-                .then((json) => {
-                    setResults(json);
-                    // Set isLoading to false after the results have been set
-                    setIsLoading(false);
-                    navigate(`/search/results?searchTerm=${input}&requestDataType=${searchType.toLowerCase()}`);
-                });
-        }
-    };
-
-    // const fetchData = () => {
-    //     if (input) {
-    //         console.log('input: ', input);
-    //         fetch(`http://${config.server_host}:${config.server_port}/search/results?searchTerm=${input}
-    //         &requestDataType=${searchType.toLowerCase()}`)
-    //             .then((response) => response.json())
-    //             .then((json) => {
-    //                 console.log('JSON response:', json);
-    //                 setResults(json);
-    //                 // Include the input as a parameter in the URL
-    //                 navigate(`/search/results?searchTerm=${input}&requestDataType=${searchType.toLowerCase()}`);
-    //             });
-    //     }
-    // };
-
-    const handleChanges = (value) => {
-        setInput(value);
-    }
-
-    const toggleSearchType = () => {
-        setSearchType(prevType => prevType === "Movie" ? "Person" : "Movie");
-    }
-
-    return (
-        <div className="Input-wrapper">
-            <div className="input-container">
-                <Button onClick={toggleSearchType}>{searchType}</Button>
-                <input
-                    placeholder="Type here to search..."
-                    value = {input}
-                    onChange={(e) => handleChanges(e.target.value)}
-                />
-                <Button onClick={fetchData}>Search</Button>
-                <FaSearch id = "search-icon"/>
-            </div>
-        </div>
-    );
-};
+// import React, {useContext, useState} from "react";
+// import {FaSearch} from "react-icons/fa";
+// import {Button} from "@mui/material";
+// import { useNavigate } from "react-router-dom";
+// import "./SearchBar.css";
+// import SearchContext from "./SearchContext";
+//
+// const config = require('../config.json');
+//
+// export const SearchBar = () => {
+//     const [input, setInput] = useState("");
+//     const [searchType, setSearchType] = useState("Movie");
+//     // const navigate = useNavigate();
+//     const { results, setResults, isLoading, setIsLoading, searched, setSearched } = useContext(SearchContext);
+//
+//     const fetchData = () => {
+//         if (input) {
+//             // Set isLoading to true before making the fetch request
+//             setIsLoading(true);
+//
+//             fetch(`http://${config.server_host}:${config.server_port}/search?searchTerm=${input.toLowerCase()}&requestDataType=${searchType.toLowerCase()}`)
+//                 .then((response) => response.json())
+//                 .then((json) => {
+//                     setResults(json);
+//                     // Set isLoading and Searched to false after the results have been set
+//                     setIsLoading(false);
+//                     setSearched(true);
+//                 });
+//         }
+//     };
+//
+//     const handleChanges = (value) => {
+//         setInput(value);
+//     }
+//
+//     const toggleSearchType = () => {
+//         setSearchType(prevType => prevType === "Movie" ? "Person" : "Movie");
+//     }
+//
+//     return (
+//         <div className="Input-wrapper">
+//             <div className="input-container">
+//                 <Button onClick={toggleSearchType}>{searchType}</Button>
+//                 <input
+//                     placeholder="Type here to search..."
+//                     value = {input}
+//                     onChange={(e) => handleChanges(e.target.value)}
+//                 />
+//                 <Button onClick={fetchData}>Search</Button>
+//                 <FaSearch id = "search-icon"/>
+//             </div>
+//         </div>
+//     );
+// };
 
 // import React, {useState} from "react";
 // import {FaSearch} from "react-icons/fa";

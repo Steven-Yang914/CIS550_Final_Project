@@ -37,7 +37,6 @@ export default function App() {
                  <Route path="/" element={<HomePage />} />
                     <Route path="/movie/:movie_id" element={<MovieInfoPage />} />
                     <Route path="/search" element={<SearchPage />} />
-                    <Route path="/search/results" element={<SearchResultsPage />}/>
                 </Routes>
             </SearchProvider>
         </BrowserRouter>

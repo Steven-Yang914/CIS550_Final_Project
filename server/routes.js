@@ -49,14 +49,17 @@ const random = async function (req, res) {
   }
 }
 
+
 const search = async function (req, res) {
   // Extract search query from the request
+  const page = req.query.page;
+  const pageSize = req.query.page_size ?? 10;
   const searchTerm = req.query.searchTerm.trim();           // The search key
   const requestDataType = req.query.requestDataType.trim(); // Specify what type of data is being requested
   // For simplicity, this example splits the query into words
   // Search the movies database/API using the keywords
   // This is a placeholder function. Replace with your actual search logic.
-  const searchResult = await searchDatabase(requestDataType, searchTerm);
+  const searchResult = await searchDatabase(requestDataType, searchTerm, page, pageSize);
   if (Array.isArray(searchResult) && searchResult.length > 0) {
     // Send the search results as JSON
     res.json(searchResult);
@@ -64,52 +67,82 @@ const search = async function (req, res) {
     res.json([]);
   }
 }
-//   } catch (error) {
-//     // Handle any errors
-//     res.status(500).json({ error: 'Internal Server Error' });
-//   }
-// }
 
-function searchDatabase(requestDataType, keyword) {
+function searchDatabase(requestDataType, keyword, page, pageSize) {
   return new Promise((resolve, reject) => {
     if(keyword) {
       if (requestDataType === 'movie') {
-        connection.query(`WITH GoodMovies AS ( 
+        if (!page) {
+            connection.query(`
             SELECT *
-            FROM Movies m 
-            WHERE lower(PrimaryTitle) LIKE ? AND
-                  m.MovieID IS NOT NULL
-            )
-          SELECT gm.*, r.*, po.PosterURL
-          FROM GoodMovies gm JOIN Ratings r on gm.MovieID = r.MovieID 
-              LEFT JOIN Posters po on gm.MovieID = po.MovieID`,
-            [`%${keyword}%`],
-            (err, data) => {
-              if (err) {
-                console.log(err);
-                reject('There was an error querying the database.');
-              } else {
-                console.log(data)
-                resolve(data);
-              }
-            }
-        );
-      }
-      else if (requestDataType === 'person') {
-        connection.query(`
-        SELECT *
-        FROM People
-        WHERE lower(Name) LIKE lower('%${keyword}%') AND
-          People.PeopleID IS NOT NULL`,
-            (err, data) => {
-              if (err) {
-                console.log(err);
-                reject('There was an error querying the database.');
-              } else {
-                resolve(data);
-              }
-            }
-        );
+            FROM Movies m, Ratings r, Posters p
+            WHERE m.MovieID = r.MovieID
+            AND m.MovieID = p.MovieID
+            AND lower(PrimaryTitle) LIKE ?
+            ORDER BY r.AverageRating DESC
+            LIMIT 200;  
+            `, [`%${keyword}%`],
+                (err, data) => {
+                    if (err) {
+                    console.log(err);
+                    reject('There was an error querying the database.');
+                    } else {
+                    resolve(data);
+                    }
+                });
+        } else {
+            connection.query(`
+            SELECT *
+            FROM Movies m, Ratings r, Posters p
+            WHERE m.MovieID = r.MovieID
+            AND m.MovieID = p.MovieID
+            AND lower(PrimaryTitle) LIKE ?
+            ORDER BY r.AverageRating DESC
+            LIMIT ${pageSize} OFFSET ${(page - 1) * pageSize}
+            `, [`%${keyword}%`],
+                (err, data) => {
+                    if (err) {
+                    console.log(err);
+                    reject('There was an error querying the database.');
+                    } else {
+                    resolve(data);
+                    }
+                });
+        }
+      } else if (requestDataType === 'person') {
+        if (!page) {
+            connection.query(`
+            SELECT p.name, p.PeopleID
+            FROM People p
+            WHERE lower(Name) LIKE ?
+            LIMIT 200;`,
+                [`%${keyword}%`],
+                (err, data) => {
+                    if (err) {
+                    console.log(err);
+                    reject('There was an error querying the database.');
+                    } else {
+                    resolve(data);
+                    }
+                }
+            );
+        } else {
+            connection.query(`
+            SELECT p.name, p.PeopleID
+            FROM People p
+            WHERE lower(Name) LIKE ?
+            LIMIT ${pageSize} OFFSET ${(page - 1) * pageSize}
+            `, [`%${keyword}%`],
+                (err, data) => {
+                    if (err) {
+                    console.log(err);
+                    reject('There was an error querying the database.');
+                    } else {
+                    resolve(data);
+                    }
+                }
+            );
+        }
       }
     } else {
       resolve([]);
@@ -117,38 +150,118 @@ function searchDatabase(requestDataType, keyword) {
   });
 }
 
-const randomDirector = async function (req, res) {
-  connection.query(`
+
+
+
+const PickOneRandomDirector = async function (req, res) {
+    connection.query(`
 WITH randomID AS (
-SELECT PeopleID
-FROM Crew_in
-WHERE Job = 'director'
-ORDER BY RAND()
-Limit 1
-),
-    IDCi as (
-    SELECT ri.PeopleID, ci.MovieID
-    FROM randomID ri
-    JOIN Crew_in ci on ri.PeopleID = ci.PeopleID
-),
-    DirectorIDs AS (
-    SELECT p.*, ic.MovieID
-    FROM IDCi ic JOIN People p
-        on ic.PeopleID = p.PeopleID
-     )
-  SELECT m.*, d.Name as Director
-  FROM DirectorIDs d JOIN
-       Movies m ON d.MovieID = m.MovieID;
-      `, (err, data) => {
-    if (err || data.length === 0) {
-        console.log(err);
-        res.json({});
-    } else {
-      console.log("random director's movies: ", data);
-      res.json(data);
-    }
-  });
+        SELECT PeopleID
+        FROM Crew_in
+        WHERE Job = 'director'
+        ORDER BY RAND()
+        Limit 1)
+        SELECT p.*
+        FROM randomID ri JOIN People p on ri.PeopleID = p.PeopleID;`
+, (err, data) => {
+        if (err || data.length === 0) {
+            console.log(err);
+            res.json({});
+        } else {
+            console.log("random director's movies: ", data);
+            res.json(data);
+        }
+    });
 }
+
+const randomDirector = async function (req, res) {
+    const page = req.query.page;
+    const pageSize = req.query.page_size ?? 10;
+    if (!page) {
+        connection.query(`
+WITH randomID AS (
+      SELECT PeopleID
+      FROM Crew_in
+      WHERE Job = 'director'
+      ORDER BY RAND()
+      Limit 1
+),
+    selectedIn AS (
+    SELECT ci.MovieID, rii.PeopleID
+    FROM randomID rii JOIN Crew_in ci on rii.PeopleID = ci.PeopleID
+    )
+  SELECT m.MovieID, m.PrimaryTitle, p.Name as director, pp.PosterURL
+  FROM selectedIn si
+           JOIN People p on si.PeopleID = p.PeopleID
+           JOIN Movies m on m.MovieID = si.MovieID
+           LEFT JOIN Posters pp on pp.MovieID = si.MovieID
+  LIMIT 200;
+      `, (err, data) => {
+            if (err || data.length === 0) {
+                console.log(err);
+                res.json({});
+            } else {
+                console.log("random director's movies: ", data);
+                res.json(data);
+            }
+        })
+    } else {
+        connection.query(`
+        WITH randomID AS (
+      SELECT PeopleID
+      FROM Crew_in
+      WHERE Job = 'director'
+      ORDER BY RAND()
+      Limit 1
+),
+    selectedIn AS (
+    SELECT ci.MovieID, rii.PeopleID
+    FROM randomID rii JOIN Crew_in ci on rii.PeopleID = ci.PeopleID
+    )
+  SELECT m.MovieID, m.PrimaryTitle, p.Name as director, pp.PosterURL
+  FROM selectedIn si
+           JOIN People p on si.PeopleID = p.PeopleID
+           JOIN Movies m on m.MovieID = si.MovieID
+           LEFT JOIN Posters pp on pp.MovieID = si.MovieID
+  LIMIT ${pageSize} OFFSET ${(page - 1) * pageSize};
+`, (err, data) => {
+            if (err || data.length === 0) {
+                console.log(err);
+                res.json({});
+            } else {
+                console.log("random director's movies: ", data);
+                res.json(data);
+            }
+        });
+    }
+}
+// -- WITH SelectPoster AS (
+//     --     SELECT po.PosterURL, po.MovieID
+// --     FROM Posters po
+// --     WHERE LENGTH(po.PosterURL) > 2
+// --   ),
+// --  randomID AS (
+//     --     SELECT PeopleID
+// --     FROM Crew_in cii JOIN SelectPoster sp on cii.MovieID = sp.MovieID
+// --     WHERE Job = 'director'
+// --     ORDER BY RAND()
+// --     Limit 1
+// -- ),
+// --     IDCi as (
+//     --     SELECT ri.PeopleID, ci.MovieID
+// --     FROM randomID ri
+// --     JOIN Crew_in ci on ri.PeopleID = ci.PeopleID
+// -- ),
+// --     DirectorIDs AS (
+//     --     SELECT p.*, ic.MovieID
+// --     FROM IDCi ic JOIN People p
+// --         on ic.PeopleID = p.PeopleID
+// --      )
+// --   SELECT m.*, d.Name as director
+// --   FROM DirectorIDs d
+// --       JOIN Movies m ON d.MovieID = m.MovieID
+// --   ORDER BY d.AverageRating DESC
+// --   LIMIT 10;
 
 
 // function searchDatabase(requestDataType, keyword) {
@@ -270,32 +383,12 @@ const getCrewOfMovie = async function (req, res) {
   });
 }
 
-const topMoviesByGenre = async function (req, res) {
-  connection.query(`WITH MaxRatings AS (
-    SELECT og2.Genre, MAX(r2.AverageRating) AS MaxAvgRating
-    FROM Ratings r2
-    JOIN ofGenre og2 on r2.MovieID = og2.MovieID
-    GROUP BY og2.Genre
-    )
-    SELECT rr.AverageRating, mrr.Genre,  mm.*
-    FROM Ratings rr JOIN MaxRatings mrr
-    on rr.AverageRating = mrr.MaxAvgRating
-    JOIN Movies mm on mm.MovieID = rr.MovieID;`, (err, data) => {
-    if (err || data.length === 0) {
-      console.log(err);
-      res.json([]);
-    } else {
-      res.json(data);
-    }
-  });
-}
-
 const topMovies = async function (req, res) {
-  const page = req.query.page;
-  const pageSize = req.query.page_size ?? 10;
+    const page = req.query.page;
+    const pageSize = req.query.page_size ?? 10;
 
-  if (!page) {
-    connection.query(`
+    if (!page) {
+        connection.query(`
     SELECT *
     FROM Movies m, Ratings r, Posters p
     WHERE m.MovieID = r.MovieID
@@ -304,15 +397,15 @@ const topMovies = async function (req, res) {
     ORDER BY r.AverageRating DESC
     LIMIT 200;  
   `, (err, data) => {
-    if (err || data.length === 0) {
-      console.log(err);
-      res.json([]);
+            if (err || data.length === 0) {
+                console.log(err);
+                res.json([]);
+            } else {
+                res.json(data);
+            }
+        });
     } else {
-      res.json(data);
-    }
-  });
-  } else {
-    connection.query(`
+        connection.query(`
     SELECT *
     FROM Movies m, Ratings r, Posters p
     WHERE m.MovieID = r.MovieID
@@ -321,15 +414,60 @@ const topMovies = async function (req, res) {
     ORDER BY r.AverageRating DESC
     LIMIT ${pageSize} OFFSET ${(page - 1) * pageSize}
   `, (err, data) => {
-      if (err || data.length === 0) {
-        console.log(err);
-        res.json([]);
-      } else {
-        res.json(data);
-      }
-    });
-  }
+            if (err || data.length === 0) {
+                console.log(err);
+                res.json([]);
+            } else {
+                res.json(data);
+            }
+        });
+    }
 }
+
+const topMoviesByGenre = async function (req, res) {
+    const page = req.query.page;
+    const pageSize = req.query.page_size ?? 10;
+
+    if(!page){
+        connection.query(`
+              SELECT r.AverageRating, mrr.Genre as genre,  mm.*, ps.PosterURL, p.name as director
+              FROM  Ratings r
+                        JOIN Max_rating_genre mrr on r.AverageRating = mrr.MaxAvgRating
+                        JOIN Movies mm on mm.MovieID = r.MovieID
+                        JOIN Crew_in ci on mm.MovieID = ci.MovieID
+                        JOIN People p on ci.PeopleID = p.PeopleID
+                        LEFT JOIN Posters ps on mm.MovieID = ps.MovieID
+              WHERE ci.Job = 'director'
+            `, (err, data) => {
+                if (err || data.length === 0) {
+                    console.log(err);
+                    res.json([]);
+                } else {
+                    res.json(data);
+                }
+            });
+    } else {
+        connection.query(`
+              SELECT r.AverageRating, mrr.Genre as genre,  mm.*, ps.PosterURL, p.name as director
+              FROM  Ratings r
+                        JOIN Max_rating_genre mrr on r.AverageRating = mrr.MaxAvgRating
+                        JOIN Movies mm on mm.MovieID = r.MovieID
+                        JOIN Crew_in ci on mm.MovieID = ci.MovieID
+                        JOIN People p on ci.PeopleID = p.PeopleID
+                        LEFT JOIN Posters ps on mm.MovieID = ps.MovieID
+              WHERE ci.Job = 'director'
+              LIMIT ${pageSize} OFFSET ${(page - 1) * pageSize};
+            `, (err, data) => {
+                if (err || data.length === 0) {
+                    console.log(err);
+                    res.json([]);
+                } else {
+                    res.json(data);
+                }
+            });
+    }
+}
+
 
 const allPeople = async function (req, res) {
   connection.query(`
@@ -364,6 +502,7 @@ const person = async function (req, res) {
   });
 }
 
+
 const getGenreOfMovie = async function (req, res) {
   const movieID = req.params.movie_id;
 
@@ -382,6 +521,54 @@ const getGenreOfMovie = async function (req, res) {
   });
 }
 
+const getDirectorMovie = async function (req, res) {
+    const directorID = req.query.directorID;
+    const page = req.query.page;
+    const pageSize = req.query.page_size ?? 10;
+
+    if (!page) {
+        connection.query(`
+            WITH directorInfo AS (SELECT pp.*
+                                  FROM People pp
+                                  WHERE pp.PeopleID = '${directorID}')
+            SELECT m.*, di.Name as director, p.PosterURL
+            FROM Movies m
+                     JOIN Crew_in c on m.MovieID = c.MovieID
+                     JOIN directorInfo di on c.PeopleID = di.PeopleID
+                     JOIN Posters p on m.MovieID = p.MovieID
+            LIMIT 200;
+        `, (err, data) => {
+            if (err || data.length === 0) {
+                console.log(err);
+                res.json([]);
+            } else {
+                console.log("director's movies: ", data)
+                res.json(data);
+            }
+        });
+    } else {
+        connection.query(`
+            WITH directorInfo AS (SELECT pp.*
+                                  FROM People pp
+                                  WHERE pp.PeopleID = '${directorID}')
+            SELECT m.*, di.Name as director, p.PosterURL
+            FROM Movies m
+                     JOIN Crew_in c on m.MovieID = c.MovieID
+                     JOIN directorInfo di on c.PeopleID = di.PeopleID
+                     LEFT JOIN Posters p on m.MovieID = p.MovieID
+            LIMIT ${pageSize} OFFSET ${(page - 1) * pageSize}
+        `, (err, data) => {
+            if (err || data.length === 0) {
+                console.log(err);
+                res.json([]);
+            } else {
+                console.log("director's movies: ", data)
+                res.json(data);
+            }
+        });
+    }
+}
+
 module.exports = {
   random,
   allMovies,
@@ -393,5 +580,7 @@ module.exports = {
   person,
   search,
   topMoviesByGenre,
-  randomDirector
+  randomDirector,
+    PickOneRandomDirector,
+    getDirectorMovie
 }
