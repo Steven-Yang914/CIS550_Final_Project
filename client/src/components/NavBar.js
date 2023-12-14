@@ -1,6 +1,5 @@
 import { AppBar, Container, Toolbar, Typography } from '@mui/material'
 import { NavLink } from 'react-router-dom';
-import LinkWithCrewInfo from './LinkWithCrewInfo';
 
 // The hyperlinks in the NavBar contain a lot of repeated formatting code so a
 // helper component NavText local to the file is defined to prevent repeated code.
@@ -16,7 +15,7 @@ function NavText({ href, text, isMain }) {
         letterSpacing: '.3rem',
       }}
     >
-      <LinkWithCrewInfo
+      <NavLink
         to={href}
         style={{
           color: 'inherit',
@@ -24,7 +23,7 @@ function NavText({ href, text, isMain }) {
         }}
       >
         {text}
-      </LinkWithCrewInfo>
+      </NavLink>
     </Typography>
   )
 }
@@ -38,8 +37,6 @@ export default function NavBar() {
       <Container maxWidth='xl'>
         <Toolbar disableGutters>
           <NavText href='/' text='Studio on Walnut' isMain />
-          <NavText href='/search' text='Search' />
-          <NavText href='/result' text='Result' />
         </Toolbar>
       </Container>
     </AppBar>
