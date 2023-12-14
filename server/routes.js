@@ -260,23 +260,41 @@ const allPeople = async function (req, res) {
   });
 }
 
+// const person = async function (req, res) {
+//   const personID = req.params.person_id;
+
+//   connection.query(`
+//     SELECT *
+//     FROM Movies m, People p, Crew_in c
+//     WHERE c.MovieID = m.MovieID AND c.PeopleID = p.PeopleID
+//     AND p.PeopleID = '${personID}'
+//   `, (err, data) => {
+//     if (err || data.length === 0) {
+//       console.log(err);
+//       res.json([]);
+//     } else {
+//       res.json(data);
+//     }
+//   });
+// }
 const person = async function (req, res) {
   const personID = req.params.person_id;
 
   connection.query(`
-    SELECT *
-    FROM Movies m, People p, Crew_in c
-    WHERE c.MovieID = m.MovieID AND c.PeopleID = p.PeopleID
-    AND p.PeopleID = '${personID}'
+      SELECT m.MovieID, m.Title, m.StartYear AS Year
+      FROM Movies m
+      JOIN Crew_in c ON m.MovieID = c.MovieID
+      WHERE c.PeopleID = '${personID}'
   `, (err, data) => {
-    if (err || data.length === 0) {
-      console.log(err);
-      res.json([]);
-    } else {
-      res.json(data);
-    }
+      if (err || data.length === 0) {
+          console.log(err);
+          res.json([]);
+      } else {
+          res.json(data);
+      }
   });
 }
+
 
 const getPersonInfo = async function (req, res) {
   const personID = req.params.person_id;

@@ -83,7 +83,7 @@ function PeopleInfoPage() {
                                     <strong style={{ fontSize: '16px' }}>Related Movies:</strong> 
                                     {relatedMovies.map((movie, index) => (
                                         <div key={index}>
-                                            <LinkWithCrewInfo style={{ textDecoration: 'none', color: 'blue', fontWeight: 'bold' }}>
+                                            <LinkWithCrewInfo to={`/movie/${movie.MovieID}`} style={{ textDecoration: 'none', color: 'blue', fontWeight: 'bold' }}>
                                                 {movie.Title} ({movie.Year})
                                             </LinkWithCrewInfo>
                                         </div>
