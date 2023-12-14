@@ -24,19 +24,6 @@ export const theme = createTheme({
 });
 
 export default function App() {
-    return (
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <BrowserRouter>
-          <NavBar />
-            <SearchProvider>
-                <Routes>
-                 <Route path="/" element={<HomePage />} />
-                    <Route path="/movie/:movie_id" element={<MovieInfoPage />} />
-                </Routes>
-            </SearchProvider>
-        </BrowserRouter>
-      </ThemeProvider>
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
