@@ -52,11 +52,13 @@ const random = async function (req, res) {
 
 const search = async function (req, res) {
   // Extract search query from the request
-  const page = req.query.page;
-  const pageSize = req.query.page_size ?? 10;
-  const searchTerm = req.query.searchTerm.trim();           // The search key
-  const requestDataType = req.query.requestDataType.trim(); // Specify what type of data is being requested
-  // For simplicity, this example splits the query into words
+    const page = req.query.page;
+    const pageSize = req.query.page_size ?? 10;
+    const searchTerm = req.query.searchTerm.trim();           // The search key
+    const requestDataType = req.query.requestDataType.trim(); // Specify what type of data is being requested
+
+
+    // For simplicity, this example splits the query into words
   // Search the movies database/API using the keywords
   // This is a placeholder function. Replace with your actual search logic.
   const searchResult = await searchDatabase(requestDataType, searchTerm, page, pageSize);

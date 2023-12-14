@@ -13,13 +13,17 @@ function SearchResultsTable({ searchTerm, searchDataType }) {
     const {currentPage, setCurrentPage} = useContext(SearchContext);
     // const moviesPerPage = useRef(12)
 
+    console.log("searchTerm passed in: ", searchTerm);
+    console.log("searchDataType passed in: ", searchDataType);
+
 
     useEffect(() => {
+        console.log("SearchTerm in useeffect", searchTerm);
         if (searchTerm) {
+            console.log("SearchTerm in useeffect", searchTerm);
+            console.log("SearchDataType in useeffect", searchDataType);
             setIsLoading(true);
-            fetch(`http://${config.server_host}:${config.server_port}/search?searchTerm=${searchTerm.toLowerCase()}
-            &requestDataType=${searchDataType.toLowerCase()}
-            &page=${currentPage}&page_size=${moviesPerPage.current}`)
+            fetch(`http://${config.server_host}:${config.server_port}/search?searchTerm=${searchTerm.toLowerCase()}&requestDataType=${searchDataType.toLowerCase()}&page=${currentPage}&page_size=${moviesPerPage.current}`)
                 .then((response) => response.json())
                 .then((json) => {
                     setResults(json);
@@ -27,7 +31,9 @@ function SearchResultsTable({ searchTerm, searchDataType }) {
                     setSearched(true);
                 });
         }
-    }, [searchTerm, searchDataType, currentPage]);
+    }, [searchTerm, currentPage]);
+
+
 
     useEffect(() => {
         if (results) {
@@ -107,8 +113,8 @@ function SearchResultsTable({ searchTerm, searchDataType }) {
                                         color: '#333',
                                     }}
                                 >
-                                    <span>{globalIndex}. </span>
-                                    {item.Name}
+                                    <span style={{ marginBottom: "20px"}}>{ globalIndex}. </span>
+                                    {item.name}
                                 </NavLink>
                             </Grid>
                         );

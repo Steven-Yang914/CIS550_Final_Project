@@ -59,7 +59,7 @@ function SearchPage() {
             </div>
             {!searched ? (showTopMovies ? <TopAvgRateMoviesTable /> : <RandomDirectorMovies />)
                 :
-                (<SearchResultsTable searchTerm = {input} searchDataType={searchType} />)
+                (<SearchResultsTable searchTerm = {input.toLowerCase()} searchDataType={searchType.toLowerCase()} />)
             }
         </div>
         </Container>
