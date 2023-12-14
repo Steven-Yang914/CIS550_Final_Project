@@ -1,102 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Container, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Button, Paper } from '@mui/material';
-import LinkWithCrewInfo from "../components/LinkWithCrewInfo";
+import { Container} from '@mui/material';
+import { NavLink } from 'react-router-dom';
 
 const config = require('../config.json');
 
 function PersonInfoPage() {
-    const { person_id } = useParams();
-    const [personInfo, setPersonInfo] = useState({});
-    const [relatedMovies, setRelatedMovies] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState(null);
-    console.log(person_id);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                // Get general info of the person
-                let response = await fetch(`http://${config.server_host}:${config.server_port}/personInfo/${person_id}`);
-                let data = await response.json();
-                setPersonInfo(data[0]);
 
-                // Get movies related to the person
-                response = await fetch(`http://${config.server_host}:${config.server_port}/person/${person_id}`);
-                data = await response.json();
-                console.log(data);
-                setRelatedMovies(data);
-            } catch (err) {
-                console.error("Error fetching data:", err);
-                setError(err);
-            } finally {
-                setIsLoading(false);
-            }
-        };
+  return (
+    <Container>
 
-        fetchData();
-    }, [person_id]);
+    </Container>
+  );
+}
 
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
-
-    if (error) {
-        return <div>Error loading data.</div>;
-    }
-
-    const { Name, BirthYear, DeathYear } = personInfo;
-    console.log(personInfo);
-
-    return (
-        <Container>
-            <TableContainer component={Paper}>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>
-                                <Typography variant="h3">{Name}</Typography>
-                            </TableCell>
-                            <TableCell>
-                                <Button variant="contained">
-                                    <LinkWithCrewInfo to={`/result`}>
-                                        Add
-                                    </LinkWithCrewInfo>
-                                </Button>
-                            </TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        <TableRow>
-                            <TableCell><strong style={{ fontSize: '16px' }}>Birth Year:</strong> {BirthYear}</TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell>
-                                <strong style={{ fontSize: '16px' }}>Death Year:</strong>
-                                {DeathYear && DeathYear !== 0 ? DeathYear : ' NA'}
-                            </TableCell>
-                        </TableRow>
-                        {relatedMovies.length > 0 && 
-                            <TableRow>
-                                <TableCell>
-                                    <strong style={{ fontSize: '16px' }}>Related Movies:</strong> 
-                                    {relatedMovies.map((movie, index) => (
-                                        <div key={index}>
-                                            <LinkWithCrewInfo to={`/movie/${movie.MovieID}`} style={{ textDecoration: 'none', color: 'blue', fontWeight: 'bold' }}>
-                                                {movie.PrimaryTitle} ({movie.Year}) (Role: {movie.Job})
-                                            </LinkWithCrewInfo>
-                                        </div>
-                                    ))}
-                                </TableCell>
-                            </TableRow>
-                        }
-                    </TableBody>
-                </Table>
-            </TableContainer>
-        </Container>
-    );
-    }
-    
-
-  export default PersonInfoPage;
-
+export default PersonInfoPage;
