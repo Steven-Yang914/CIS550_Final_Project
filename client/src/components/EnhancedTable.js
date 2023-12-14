@@ -46,6 +46,7 @@ function EnhancedTable(props) {
   var rawdata = Object.values(props.data);
   const [selected, setSelected] = useState([]);
   const [rows, setRows] = useState([]);
+  const [isDataFetched, setIsDataFetched] = useState(false);
 
   function EnhancedTableHead(props) {
     const { onSelectAllClick, numSelected, rowCount } = props;
@@ -133,31 +134,35 @@ function EnhancedTable(props) {
   }
 
   useEffect(() => {
-    const fetchPromises = rawdata.map(async (item) => {
-      const genre_res = await fetch(
-        `http://${config.server_host}:${config.server_port}/result/genre-freq/${item.PeopleID}`
-      );
+    if (!isDataFetched) {
+      const fetchPromises = rawdata.map(async (item) => {
+        const genre_res = await fetch(
+          `http://${config.server_host}:${config.server_port}/result/genre-freq/${item.PeopleID}`
+        );
 
-      const genre_data = await genre_res.json();
+        const genre_data = await genre_res.json();
 
-      const job_res = await fetch(
-        `http://${config.server_host}:${config.server_port}/result/job-freq/${item.PeopleID}`
-      );
-      const job_data = await job_res.json();
+        const job_res = await fetch(
+          `http://${config.server_host}:${config.server_port}/result/job-freq/${item.PeopleID}`
+        );
+        const job_data = await job_res.json();
 
-      return {
-        ...item,
-        topGenres: genre_data
-          .slice(0, 3)
-          .map((item) => item.Genre)
-          .join(", "),
-        topJob: job_data[0]?.Job,
-      };
-    });
-    Promise.all(fetchPromises).then((updatedRawData) => {
-      setRows(updatedRawData);
-    });
-  }, [rawdata]);
+        return {
+          ...item,
+          topGenres: genre_data
+            .slice(0, 3)
+            .map((item) => item.Genre)
+            .join(", "),
+          topJob: job_data[0]?.Job,
+        };
+      });
+
+      Promise.all(fetchPromises).then((updatedRawData) => {
+        setRows(updatedRawData);
+        setIsDataFetched(true);
+      });
+    }
+  }, [isDataFetched, rawdata]);
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
