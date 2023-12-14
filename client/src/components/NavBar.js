@@ -39,7 +39,7 @@ export default function NavBar() {
         <Toolbar disableGutters>
           <NavText href='/' text='Studio on Walnut' isMain />
           <NavText href='/search' text='Search' />
-          <NavText href='/result' text='Result' />
+          <NavText href='/design' text='Design' />
         </Toolbar>
       </Container>
     </AppBar>
