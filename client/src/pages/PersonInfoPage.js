@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Container, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Button, Paper } from '@mui/material';
 import LinkWithCrewInfo from "../components/LinkWithCrewInfo";
+import { useNavigate } from 'react-router-dom';
+
 
 const config = require('../config.json');
 
@@ -11,7 +13,8 @@ function PersonInfoPage() {
     const [relatedMovies, setRelatedMovies] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
-    console.log(person_id);
+    const navigate = useNavigate();
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -24,7 +27,6 @@ function PersonInfoPage() {
                 // Get movies related to the person
                 response = await fetch(`http://${config.server_host}:${config.server_port}/person/${person_id}`);
                 data = await response.json();
-                console.log(data);
                 setRelatedMovies(data);
             } catch (err) {
                 console.error("Error fetching data:", err);
@@ -46,7 +48,17 @@ function PersonInfoPage() {
     }
 
     const { Name, BirthYear, DeathYear } = personInfo;
-    console.log(personInfo);
+
+    const handleAddButtonClick = () => {
+        const searchParams = new URLSearchParams(window.location.search);
+        
+        const existingCrew = searchParams.get('chosen-crew');
+        const updatedCrew = existingCrew ? `${existingCrew},${person_id}` : person_id;
+        searchParams.set('chosen-crew', updatedCrew);
+
+        navigate(`/design?${searchParams.toString()}`);
+    };
+
 
     return (
         <Container>
@@ -58,7 +70,7 @@ function PersonInfoPage() {
                                 <Typography variant="h3">{Name}</Typography>
                             </TableCell>
                             <TableCell>
-                                <Button variant="contained">
+                                <Button variant="contained" onClick={handleAddButtonClick}>
                                     <LinkWithCrewInfo to={`/result`}>
                                         Add
                                     </LinkWithCrewInfo>
@@ -80,13 +92,20 @@ function PersonInfoPage() {
                             <TableRow>
                                 <TableCell>
                                     <strong style={{ fontSize: '16px' }}>Related Movies:</strong> 
-                                    {relatedMovies.map((movie, index) => (
-                                        <div key={index}>
-                                            <LinkWithCrewInfo to={`/movie/${movie.MovieID}`} style={{ textDecoration: 'none', color: 'blue', fontWeight: 'bold' }}>
-                                                {movie.PrimaryTitle} ({movie.Year}) (Role: {movie.Job})
-                                            </LinkWithCrewInfo>
-                                        </div>
-                                    ))}
+                                    <ul style={{ listStyleType: 'none', padding: 0 }}>
+                                        {relatedMovies.map((movie, index) => (
+                                            <li key={index} style={{ marginBottom: '16px' }}>
+                                                <LinkWithCrewInfo to={`/movie/${movie.MovieID}`} style={{ textDecoration: 'none', color: 'blue', fontWeight: 'bold' }}>
+                                                    <div>
+                                                        <span style={{ fontSize: '18px' }}>{movie.PrimaryTitle}</span> ({movie.Year})
+                                                    </div>
+                                                    <div style={{ fontSize: '14px', color: '#666' }}>
+                                                        Role: {movie.Job}
+                                                    </div>
+                                                </LinkWithCrewInfo>
+                                            </li>
+                                        ))}
+                                    </ul>
                                 </TableCell>
                             </TableRow>
                         }
@@ -95,8 +114,6 @@ function PersonInfoPage() {
             </TableContainer>
         </Container>
     );
-    }
-    
+}
 
-  export default PersonInfoPage;
-
+export default PersonInfoPage;
