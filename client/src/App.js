@@ -3,9 +3,14 @@ import { CssBaseline, ThemeProvider } from '@mui/material'
 import { indigo, amber } from '@mui/material/colors'
 import { createTheme } from "@mui/material/styles";
 
+import SearchPage from "./pages/SearchPage";
 import NavBar from './components/NavBar';
 import HomePage from './pages/HomePage';
 import MovieInfoPage from './pages/MovieInfoPage';
+import SearchResultsPage from "./pages/SearchResultPage";
+import React, { useContext } from 'react';
+import SearchContext from './components/SearchContext';
+import {SearchProvider} from "./components/SearchProvider";
 import PersonInfoPage from "./pages/PersonInfoPage";
 import ResultPage from './pages/ResultPage';
 
@@ -23,6 +28,19 @@ export const theme = createTheme({
 // our application, with each Route component representing a page and the common
 // NavBar component allowing us to navigate between pages (with hyperlinks)
 export default function App() {
+    return (
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <BrowserRouter>
+          <NavBar />
+            <SearchProvider>
+                <Routes>
+                 <Route path="/" element={<HomePage />} />
+                    <Route path="/movie/:movie_id" element={<MovieInfoPage />} />
+                </Routes>
+            </SearchProvider>
+        </BrowserRouter>
+      </ThemeProvider>
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -33,6 +51,7 @@ export default function App() {
           <Route path="/movie/:movie_id" element={<MovieInfoPage />} />
           <Route path="/person/:person_id" element={<PersonInfoPage />} />
           <Route path="/result" element={<ResultPage />} />
+          <Route path="/search" element={<SearchPage />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>

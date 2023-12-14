@@ -1,0 +1,41 @@
+.input-wrapper {
+    background-color: white;
+    width: 100%;
+    border-radius: 10px;
+    height: 2.5rem;
+    padding: 0 15px;
+    box-shadow: 0 0 8px #ddd;
+    display: flex;
+    align-items: center;
+}
+
+.search-bar-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Align items at the start of the container */
+    padding-top: 20px; /* Add some padding at the top */
+}
+
+input {
+    background-color: transparent;
+    border: none;
+    height: 100%;
+    font-size: 1.25rem;
+    width: 100%;
+    margin-left: 5px;
+    text-align: center;
+}
+
+.input-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+input:focus {
+    outline: none;
+}
+
+#search-icon {
+    color: royalblue;
+}
