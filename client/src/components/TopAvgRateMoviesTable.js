@@ -51,12 +51,15 @@ function TopAvgRateMoviesTable() {
                                 <div style={{ maxWidth: '220px' }}>Director: {movie.director}</div>
                                 <NavLink to={`/movie/${movie.MovieID}`}>
                                     <div style={{ marginBottom: '20px' }}>
-                                        {movie.PosterURL && <img
+                                        {movie.PosterURL ? <img
                                             src={movie.PosterURL}
                                             alt={movie.PrimaryTitle}
                                             style={{ width: '180px', height: '200px' }}
                                             onError={(e) =>
                                             {e.target.onerror = null; e.target.src="https://demofree.sirv.com/nope-not-here.jpg"}}
+                                        />: <img
+                                            src="https://demofree.sirv.com/nope-not-here.jpg"
+                                            style={{ width: '180px', height: '200px' }}
                                         />}
                                     </div>
                                 </NavLink>
