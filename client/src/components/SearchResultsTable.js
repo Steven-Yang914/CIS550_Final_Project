@@ -10,7 +10,7 @@ import config from "../config.json";
 function SearchResultsTable({ searchTerm, searchDataType }) {
     const { isLoading, setIsLoading, results,
         setResults, setSearched, moviesPerPage } = useContext(SearchContext);
-    const {currentPage, setCurrentPage} = useContext(SearchContext);
+    const {currentPage, setCurrentPage, clickNum} = useContext(SearchContext);
     // const moviesPerPage = useRef(12)
 
     console.log("searchTerm passed in: ", searchTerm);
@@ -31,7 +31,7 @@ function SearchResultsTable({ searchTerm, searchDataType }) {
                     setSearched(true);
                 });
         }
-    }, [searchTerm, currentPage]);
+    }, [currentPage, clickNum]);
 
 
 

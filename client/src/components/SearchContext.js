@@ -14,6 +14,10 @@ const SearchContext = React.createContext({
     moviesPerPage: 12,
     currentPage: 1,
     setCurrentPage: () => {},
+    clickNum: 0,
+    setClickNum: () => {},
+    searchType: "movie",
+    setSearchType: () => {}
 });
 
 export default SearchContext;

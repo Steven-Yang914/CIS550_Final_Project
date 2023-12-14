@@ -77,10 +77,9 @@ function searchDatabase(requestDataType, keyword, page, pageSize) {
         if (!page) {
             connection.query(`
             SELECT *
-            FROM Movies m, Ratings r, Posters p
-            WHERE m.MovieID = r.MovieID
-            AND m.MovieID = p.MovieID
-            AND lower(PrimaryTitle) LIKE ?
+            FROM Movies m JOIN Ratings r on m.MovieID = r.MovieID 
+                 LEFT JOIN Posters p on m.MovieID = p.MovieID
+            WHERE lower(PrimaryTitle) LIKE ?
             ORDER BY r.AverageRating DESC
             LIMIT 200;  
             `, [`%${keyword}%`],
@@ -95,10 +94,9 @@ function searchDatabase(requestDataType, keyword, page, pageSize) {
         } else {
             connection.query(`
             SELECT *
-            FROM Movies m, Ratings r, Posters p
-            WHERE m.MovieID = r.MovieID
-            AND m.MovieID = p.MovieID
-            AND lower(PrimaryTitle) LIKE ?
+            FROM Movies m JOIN Ratings r on m.MovieID = r.MovieID
+                        LEFT JOIN Posters p on m.MovieID = p.MovieID
+            WHERE lower(PrimaryTitle) LIKE ?
             ORDER BY r.AverageRating DESC
             LIMIT ${pageSize} OFFSET ${(page - 1) * pageSize}
             `, [`%${keyword}%`],

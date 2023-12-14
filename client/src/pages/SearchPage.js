@@ -7,22 +7,23 @@ import {useLocation} from "react-router-dom";
 import SearchResultsTable from "../components/SearchResultsTable";
 import {FaSearch} from "react-icons/fa";
 import "./SearchPage.css";
-import config from "../config.json";
-import searchContext from "../components/SearchContext";
+import SearchTypeButton from "../components/SearchTypeButton";
 
 function SearchPage() {
     const location = useLocation();
     const params = new URLSearchParams(location.search);
     const [input, setInput] = useState("");
-    const [searchType, setSearchType] = useState("Movie");
     const [showTopMovies, setShowTopMovies] = useState(false);
-    const {searched, setSearched, results, setResults, isLoading, setIsLoading, currentPage, setCurrentPage} = useContext(SearchContext);
+    const {searched, setSearched, results, setResults, isLoading, setIsLoading, currentPage, setCurrentPage, clickNum, setClickNum} = useContext(SearchContext);
+    const {searchType, setSearchType} = useContext(SearchContext);
 
     const startSearch = () => {
         if (input) {
             setIsLoading(true);
             setSearched(true);
-            setCurrentPage(1); // Reset currentPage to 1 when a new search is started
+            setCurrentPage(1);
+            setClickNum(clickNum + 1);
+            // Reset currentPage to 1 when a new search is started
         }
     }
 
@@ -36,17 +37,13 @@ function SearchPage() {
         setInput(value);
     }
 
-    const toggleSearchType = () => {
-        setSearchType(prevType => prevType === "Movie" ? "Person" : "Movie");
-    }
-
     return (
         <Container>
         <div className="search-page">
             <div className="search-bar-container">
                 <div className="Input-wrapper">
                     <div className="input-container">
-                        <Button onClick={toggleSearchType}>{searchType}</Button>
+                        <SearchTypeButton />
                         <input
                             placeholder="Type here to search..."
                             value = {input}
