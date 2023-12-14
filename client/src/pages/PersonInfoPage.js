@@ -70,15 +70,12 @@ function PersonInfoPage() {
                         <TableRow>
                             <TableCell><strong style={{ fontSize: '16px' }}>Birth Year:</strong> {BirthYear}</TableCell>
                         </TableRow>
-                        {DeathYear && (
-                            <TableRow>
-                                <TableCell>
-                                    { (!DeathYear || DeathYear === 0) 
-                                        ? <strong style={{ fontSize: '16px' }}>Death Year: Alive</strong> 
-                                        : <strong style={{ fontSize: '16px' }}>Death Year: {DeathYear}</strong> }
-                                </TableCell>
-                            </TableRow>
-                        )}
+                        <TableRow>
+                            <TableCell>
+                                <strong style={{ fontSize: '16px' }}>Death Year:</strong>
+                                {DeathYear && DeathYear !== 0 ? DeathYear : ' NA'}
+                            </TableCell>
+                        </TableRow>
                         {relatedMovies.length > 0 && 
                             <TableRow>
                                 <TableCell>
@@ -97,9 +94,9 @@ function PersonInfoPage() {
                 </Table>
             </TableContainer>
         </Container>
-    );    
-
-  }
+    );
+    }
+    
 
   export default PersonInfoPage;
 
