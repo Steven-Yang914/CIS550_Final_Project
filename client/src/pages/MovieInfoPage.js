@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Container, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import { NavLink } from 'react-router-dom';
+import LinkWithCrewInfo from '../components/LinkWithCrewInfo';
 
 const config = require('../config.json');
 
@@ -49,7 +50,7 @@ function MovieInfoPage() {
   return (
     <Container>
       <Stack direction="row" spacing={2}>
-        <img src={PosterURL} alt="Movie Poster" style={{ width: '400px', height: '400px' }} />
+        < img src={PosterURL} alt="Movie Poster" style={{ width: '400px', height: '400px' }} />
 
         <TableContainer>
           <Table>
@@ -80,9 +81,9 @@ function MovieInfoPage() {
                     <strong style={{ fontSize: '16px' }}>Director: </strong> 
                     {directors.map((director, index) => (
                       <span key={index}>
-                        <NavLink style={{ textDecoration: 'none', color: 'blue', fontWeight: 'bold' }}>
+                        <LinkWithCrewInfo to = {`/person/${director.PeopleID}`} style={{ textDecoration: 'none', color: 'blue', fontWeight: 'bold' }}>
                           {director.Name}
-                        </NavLink>
+                        </LinkWithCrewInfo>
                         {index < directors.length - 1 ? ', ' : ''}
                       </span>
                     ))}
@@ -95,9 +96,9 @@ function MovieInfoPage() {
                   <TableCell>
                     <strong style={{ fontSize: '16px' }}>Top cast:</strong> {casts.map((cast, index) => (
                       <div key={index}>
-                        <NavLink style={{ textDecoration: 'none', color: 'blue', fontWeight: 'bold' }}>
+                        <LinkWithCrewInfo to = {`/person/${cast.PeopleID}`} style={{ textDecoration: 'none', color: 'blue', fontWeight: 'bold' }}>
                           {cast.Name}
-                        </NavLink>
+                        </LinkWithCrewInfo>
                         {' - '}
                         {cast.Characters}
                       </div>
@@ -112,9 +113,9 @@ function MovieInfoPage() {
                     <strong style={{ fontSize: '16px' }}>Writer: </strong> 
                     {writers.map((writer, index) => (
                       <span key={index}>
-                        <NavLink style={{ textDecoration: 'none', color: 'blue', fontWeight: 'bold' }}>
+                        <LinkWithCrewInfo to = {`/person/${writer.PeopleID}`} style={{ textDecoration: 'none', color: 'blue', fontWeight: 'bold' }}>
                           {writer.Name}
-                        </NavLink>
+                        </LinkWithCrewInfo>
                         {index < writers.length - 1 ? ', ' : ''}
                       </span>
                     ))}
@@ -128,9 +129,9 @@ function MovieInfoPage() {
                     <strong style={{ fontSize: '16px' }}>Producer: </strong> 
                     {producers.map((producer, index) => (
                       <span key={index}>
-                        <NavLink style={{ textDecoration: 'none', color: 'blue', fontWeight: 'bold' }}>
+                        <LinkWithCrewInfo to = {`/person/${producer.PeopleID}`} style={{ textDecoration: 'none', color: 'blue', fontWeight: 'bold' }}>
                           {producer.Name}
-                        </NavLink>
+                        </LinkWithCrewInfo>
                         {index < producers.length - 1 ? ', ' : ''}
                       </span>
                     ))}

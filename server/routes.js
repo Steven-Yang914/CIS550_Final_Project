@@ -189,7 +189,7 @@ const getCrewOfMovie = async function (req, res) {
   const movieID = req.params.movie_id;
 
   connection.query(`
-    SELECT p.Name, c.Job, c.Characters
+    SELECT p.Name, c.Job, c.Characters, p.PeopleID
     FROM Movies m, People p, Crew_in c
     WHERE c.MovieID = m.MovieID
     AND c.PeopleID = p.PeopleID
@@ -260,29 +260,47 @@ const allPeople = async function (req, res) {
   });
 }
 
+// const person = async function (req, res) {
+//   const personID = req.params.person_id;
+
+//   connection.query(`
+//     SELECT *
+//     FROM Movies m, People p, Crew_in c
+//     WHERE c.MovieID = m.MovieID AND c.PeopleID = p.PeopleID
+//     AND p.PeopleID = '${personID}'
+//   `, (err, data) => {
+//     if (err || data.length === 0) {
+//       console.log(err);
+//       res.json([]);
+//     } else {
+//       res.json(data);
+//     }
+//   });
+// }
 const person = async function (req, res) {
   const personID = req.params.person_id;
 
   connection.query(`
-    SELECT *
-    FROM Movies m, People p, Crew_in c
-    WHERE c.MovieID = m.MovieID AND c.PeopleID = p.PeopleID
-    AND p.PeopleID = '${personID}'
+      SELECT m.MovieID, m.PrimaryTitle, m.StartYear AS Year, c.Job
+      FROM Movies m
+      JOIN Crew_in c ON m.MovieID = c.MovieID
+      WHERE c.PeopleID = '${personID}'
   `, (err, data) => {
-    if (err || data.length === 0) {
-      console.log(err);
-      res.json([]);
-    } else {
-      res.json(data);
-    }
+      if (err || data.length === 0) {
+          console.log(err);
+          res.json([]);
+      } else {
+          res.json(data);
+      }
   });
 }
+
 
 const getPersonInfo = async function (req, res) {
   const personID = req.params.person_id;
 
   connection.query(`
-    SELECT *
+    SELECT p.Name, p.*
     FROM People p
     WHERE p.PeopleID = '${personID}'
   `, (err, data) => {
