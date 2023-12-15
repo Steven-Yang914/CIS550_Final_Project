@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useContext} from 'react';
 import TopAvgRateMoviesTable from '../components/TopAvgRateMoviesTable';
 import RandomDirectorMovies from '../components/RandomDirectorMovies';
+import OverTwoAdultTable from '../components/OverTwoAdultTable';
 import {Button, Container} from "@mui/material";
 import SearchContext from "../components/SearchContext";
 import {useLocation} from "react-router-dom";
@@ -13,9 +14,9 @@ function SearchPage() {
     const location = useLocation();
     const params = new URLSearchParams(location.search);
     const [input, setInput] = useState("");
-    const [showTopMovies, setShowTopMovies] = useState(false);
     const {searched, setSearched, results, setResults, isLoading, setIsLoading, currentPage, setCurrentPage, clickNum, setClickNum} = useContext(SearchContext);
     const {searchType, setSearchType} = useContext(SearchContext);
+    const [condition, setCondition] = useState(0);
 
     const startSearch = () => {
         if (input) {
@@ -27,11 +28,11 @@ function SearchPage() {
         }
     }
 
-    useEffect(() => {
-        // Generate a random boolean
-        const randomBoolean = Math.random() < 0.5;
-        setShowTopMovies(randomBoolean);
+    useEffect (() => {
+        const randomNumber = Math.floor(Math.random() * 3) + 1;
+        setCondition(randomNumber);
     }, []);
+
 
     const handleChanges = (value) => {
         setInput(value);
@@ -54,10 +55,17 @@ function SearchPage() {
                     </div>
                 </div>
             </div>
-            {!searched ? (showTopMovies ? <TopAvgRateMoviesTable /> : <RandomDirectorMovies />)
-                :
-                (<SearchResultsTable searchTerm = {input.toLowerCase()} searchDataType={searchType.toLowerCase()} />)
-            }
+            {!searched ? (
+                condition === 1 ? (
+                    <RandomDirectorMovies />
+                ) : condition === 2 ? (
+                    <TopAvgRateMoviesTable />
+                ) : (
+                    <OverTwoAdultTable />
+                )
+            ) : (
+                <SearchResultsTable searchTerm={input.toLowerCase()} searchDataType={searchType.toLowerCase()} />
+            )}
         </div>
         </Container>
     );

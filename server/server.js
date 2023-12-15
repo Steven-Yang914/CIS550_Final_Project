@@ -24,6 +24,7 @@ app.get("/result/collaboration-summary", routes.getCollaborationSummary);
 app.get("/result/genre-freq/:person_id", routes.getGenreFreqByPpl);
 app.get("/result/job-freq/:person_id", routes.getJobFreqByPpl)
 app.get("/personInfo/:person_id", routes.getPersonInfo);
+app.get("/overTwoAdult", routes.getOver2Adults);
 
 app.listen(config.server_port, () => {
   console.log(`Server running at http://${config.server_host}:${config.server_port}/`)

@@ -172,7 +172,7 @@ const movie = async function (req, res) {
 
   connection.query(`
     SELECT *
-    FROM Movies m JOIN Ratings r on m.MovieID = r.MovieID
+    FROM Movies m LEFT JOIN Ratings r on m.MovieID = r.MovieID
                       LEFT JOIN Posters p on m.MovieID = p.MovieID
     WHERE m.MovieID = '${movieID}'
   `, (err, data) => {
@@ -605,6 +605,43 @@ const getDirectorMovie = async function (req, res) {
   }
 }
 
+const getOver2Adults = async function (req, res) {
+  const page = req.query.page;
+  const pageSize = req.query.page_size ?? 10;
+  if (!page) {
+      connection.query(`
+          SELECT Name, PrimaryTitle, NumberofAdulteMovies, PeopleID, p.MovieID, StartYear AS Year, MovieID
+          FROM actorIn2AdultMovies ai2a LEFT JOIN Posters p on ai2a.MovieID = p.MovieID
+          WHERE NumberofAdulteMovies > 2
+          ORDER BY Name
+          LIMIT ${pageSize} OFFSET ${(page - 1) * pageSize}
+          `, (err, data) => {
+          if (err || data.length === 0) {
+              console.log(err);
+              res.json({});
+          } else {
+              res.json(data);
+          }
+      })
+  } else {
+      connection.query(`
+          SELECT Name, PrimaryTitle, NumberofAdulteMovies, StartYear AS Year, MovieID
+          FROM actorIn2AdultMovies
+          WHERE NumberofAdulteMovies > 2
+          ORDER BY Name
+          LIMIT ${pageSize} OFFSET ${(page - 1) * pageSize}
+          `, (err, data) => {
+          if (err || data.length === 0) {
+              console.log(err);
+              res.json({});
+          } else {
+              console.log("over 2 adults: ", data)
+              res.json(data);
+          }
+      })
+  }
+}
+
 module.exports = {
   random,
   getCollaborationSummary,
@@ -622,7 +659,8 @@ module.exports = {
   topMoviesByGenre,
   randomDirector,
   PickOneRandomDirector,
-  getDirectorMovie
+  getDirectorMovie,
+  getOver2Adults
 };
 
 // const express = require('express');
