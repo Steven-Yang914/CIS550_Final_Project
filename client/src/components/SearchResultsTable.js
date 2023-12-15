@@ -98,7 +98,7 @@ function SearchResultsTable({ searchTerm, searchDataType }) {
                         return (
                             <Grid item xs={3} key={index} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                                 <LinkWithCrewInfo
-                                    to={`/person/${item.PersonID}`}
+                                    to={`/person/${item.PeopleID}`}
                                     style={{
                                         textAlign: 'center',
                                         maxWidth: '180px',
