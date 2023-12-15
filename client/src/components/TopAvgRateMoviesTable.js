@@ -2,10 +2,10 @@
 
 import React, {useContext, useEffect, useRef, useState} from 'react';
 import {Button, Grid} from '@mui/material';
-import { NavLink } from 'react-router-dom';
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import SearchContext from "./SearchContext";
+import LinkWithCrewInfo from "./LinkWithCrewInfo";
 
 const config = require('../config.json');
 
@@ -33,7 +33,7 @@ function TopAvgRateMoviesTable() {
                             return(
                                     <Grid item xs={3} key={index} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                                         <div style={{ maxWidth: '180px', fontWeight: 'bold' }}> {movie.genre}</div>
-                                        <NavLink
+                                        <LinkWithCrewInfo
                                     to={`/movie/${movie.MovieID}`}
                                     style={{
                                         textAlign: 'center',
@@ -47,9 +47,9 @@ function TopAvgRateMoviesTable() {
                                 >
                                     <span>{globalIndex}. </span>
                                     {movie.PrimaryTitle}
-                                </NavLink>
+                                </LinkWithCrewInfo>
                                 <div style={{ maxWidth: '220px' }}>Director: {movie.director}</div>
-                                <NavLink to={`/movie/${movie.MovieID}`}>
+                                <LinkWithCrewInfo to={`/movie/${movie.MovieID}`}>
                                     <div style={{ marginBottom: '20px' }}>
                                         {movie.PosterURL ? <img
                                             src={movie.PosterURL}
@@ -58,11 +58,12 @@ function TopAvgRateMoviesTable() {
                                             onError={(e) =>
                                             {e.target.onerror = null; e.target.src="https://demofree.sirv.com/nope-not-here.jpg"}}
                                         />: <img
+                                            alt="no poster"
                                             src="https://demofree.sirv.com/nope-not-here.jpg"
                                             style={{ width: '180px', height: '200px' }}
                                         />}
                                     </div>
-                                </NavLink>
+                                </LinkWithCrewInfo>
                             </Grid>
                             );
                         })}

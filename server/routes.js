@@ -172,10 +172,9 @@ const movie = async function (req, res) {
 
   connection.query(`
     SELECT *
-    FROM Movies m, Ratings r, Posters po
-    WHERE m.MovieID = r.MovieID
-    AND m.MovieID = po.MovieID
-    AND m.MovieID = '${movieID}'
+    FROM Movies m JOIN Ratings r on m.MovieID = r.MovieID
+                      LEFT JOIN Posters p on m.MovieID = p.MovieID
+    WHERE m.MovieID = '${movieID}'
   `, (err, data) => {
     if (err || data.length === 0) {
       console.log(err);
@@ -369,12 +368,13 @@ function searchDatabase(requestDataType, keyword, page, pageSize) {
                     console.log(err);
                     reject('There was an error querying the database.');
                     } else {
+                      console.log("searchDatabase", data);
                     resolve(data);
                     }
                 });
         } else {
             connection.query(`
-            SELECT *
+            SELECT m.*, p.PosterURL
             FROM Movies m JOIN Ratings r on m.MovieID = r.MovieID
                         LEFT JOIN Posters p on m.MovieID = p.MovieID
             WHERE lower(PrimaryTitle) LIKE ?
@@ -386,6 +386,7 @@ function searchDatabase(requestDataType, keyword, page, pageSize) {
                     console.log(err);
                     reject('There was an error querying the database.');
                     } else {
+                      console.log("searchDatabase", data);
                     resolve(data);
                     }
                 });
@@ -449,7 +450,6 @@ WITH randomID AS (
             console.log(err);
             res.json({});
         } else {
-            console.log("random director's movies: ", data);
             res.json(data);
         }
     });
@@ -482,7 +482,6 @@ WITH randomID AS (
                 console.log(err);
                 res.json({});
             } else {
-                console.log("random director's movies: ", data);
                 res.json(data);
             }
         })
@@ -510,7 +509,6 @@ WITH randomID AS (
                 console.log(err);
                 res.json({});
             } else {
-                console.log("random director's movies: ", data);
                 res.json(data);
             }
         });
@@ -582,7 +580,6 @@ const getDirectorMovie = async function (req, res) {
               console.log(err);
               res.json([]);
           } else {
-              console.log("director's movies: ", data)
               res.json(data);
           }
       });
@@ -602,7 +599,6 @@ const getDirectorMovie = async function (req, res) {
               console.log(err);
               res.json([]);
           } else {
-              console.log("director's movies: ", data)
               res.json(data);
           }
       });

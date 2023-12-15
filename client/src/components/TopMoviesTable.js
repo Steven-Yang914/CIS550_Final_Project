@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import { Button, Grid } from '@mui/material';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
-import { NavLink } from 'react-router-dom';
+import LinkWithCrewInfo from "./LinkWithCrewInfo";
 
 const config = require('../config.json');
 
@@ -29,7 +29,7 @@ function TopMoviesTable() {
                     const globalIndex = (currentPage - 1) * moviesPerPage.current + index + 1;
                     return (
                         <Grid item xs={3} key={movie.MovieID} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <NavLink
+                            <LinkWithCrewInfo
                                 to={`/movie/${movie.MovieID}`}
                                 style={{
                                     textAlign: 'center',
@@ -43,8 +43,8 @@ function TopMoviesTable() {
                             >
                                 <span>{globalIndex}. </span>
                                 {movie.PrimaryTitle}
-                            </NavLink>
-                            <NavLink to={`/movie/${movie.MovieID}`}>
+                            </LinkWithCrewInfo>
+                            <LinkWithCrewInfo to={`/movie/${movie.MovieID}`}>
                                 <div style={{ marginBottom: '20px' }}>
                                     {movie.PosterURL ? <img
                                         src={movie.PosterURL}
@@ -53,11 +53,12 @@ function TopMoviesTable() {
                                         onError={(e) =>
                                         {e.target.onerror = null; e.target.src="https://demofree.sirv.com/nope-not-here.jpg"}}
                                     />: <img
+                                        alt="no poster"
                                         src="https://demofree.sirv.com/nope-not-here.jpg"
                                         style={{ width: '180px', height: '200px' }}
                                     />}
                                 </div>
-                            </NavLink>
+                            </LinkWithCrewInfo>
                         </Grid>
                     );
                 })}

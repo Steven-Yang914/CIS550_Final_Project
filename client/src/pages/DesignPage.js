@@ -31,7 +31,6 @@ function DesignPage() {
             const data = await response.json();
             infos[peopleID] = data[0];
           } catch (error) {
-            console.error("Error fetching actor info:", error);
             infos[peopleID] = {};
           }
         }

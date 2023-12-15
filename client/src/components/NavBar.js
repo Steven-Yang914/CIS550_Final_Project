@@ -1,5 +1,4 @@
 import { AppBar, Container, Toolbar, Typography } from '@mui/material'
-import { NavLink } from 'react-router-dom';
 import LinkWithCrewInfo from './LinkWithCrewInfo';
 
 // The hyperlinks in the NavBar contain a lot of repeated formatting code so a

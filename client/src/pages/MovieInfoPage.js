@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Container, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
-import { NavLink } from 'react-router-dom';
 import LinkWithCrewInfo from '../components/LinkWithCrewInfo';
 
 const config = require('../config.json');
@@ -14,9 +13,11 @@ function MovieInfoPage() {
 
   useEffect(() => {
     // Get general info of the movie
+    console.log("movie_id", movie_id)
     fetch(`http://${config.server_host}:${config.server_port}/movie/${movie_id}`)
       .then(res => res.json())
       .then(resJson => {
+        console.log("movieInfoPage", resJson)
         setMovieInfo(resJson);
       });
 
@@ -50,7 +51,18 @@ function MovieInfoPage() {
   return (
     <Container>
       <Stack direction="row" spacing={2}>
-        < img src={PosterURL} alt="Movie Poster" style={{ width: '400px', height: '400px' }} />
+        {/* < img src={PosterURL} alt="Movie Poster" style={{ width: '400px', height: '400px' }} /> */}
+        {PosterURL ? <img
+          src={PosterURL}
+          alt={PrimaryTitle}
+          style={{ width: '400px', height: '400px' }}
+          onError={(e) =>
+          {e.target.onerror = null; e.target.src="https://demofree.sirv.com/nope-not-here.jpg"}}
+        />: <img
+          alt="no poster"
+          src="https://demofree.sirv.com/nope-not-here.jpg"
+          style={{ width: '180px', height: '200px' }}
+        />}
 
         <TableContainer>
           <Table>
