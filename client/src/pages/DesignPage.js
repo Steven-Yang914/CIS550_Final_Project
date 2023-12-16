@@ -20,29 +20,41 @@ function DesignPage() {
 
   useEffect(() => {
     const fetchActorNames = async () => {
-      const peopleIDList = peopleIDs.split(",");
-      let infos = {};
-      for (const peopleID of peopleIDList) {
-        if (!infos[peopleID]) {
-          try {
-            const response = await fetch(
-              `http://${config.server_host}:${config.server_port}/personInfo/${peopleID}`
-            );
-            const data = await response.json();
-            infos[peopleID] = data[0];
-          } catch (error) {
-            infos[peopleID] = {};
+      let peopleIDList;
+      if (peopleIDs === null) {
+        peopleIDList = [];
+      } else {
+        const peopleIDList = peopleIDs.split(",");
+        let infos = {};
+        for (const peopleID of peopleIDList) {
+          if (!infos[peopleID]) {
+            try {
+              const response = await fetch(
+                `http://${config.server_host}:${config.server_port}/personInfo/${peopleID}`
+              );
+              const data = await response.json();
+              infos[peopleID] = data[0];
+            } catch (error) {
+              infos[peopleID] = {};
+            }
           }
         }
+        setPeopleInfos(infos);
+        setIsLoading(false);
       }
-      setPeopleInfos(infos);
-      setIsLoading(false);
     };
     fetchActorNames();
   }, [peopleIDs]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <Stack
+        style={{ marginTop: "30px", marginLeft: "50px", marginRight: "50px" }}
+        spacing={2}
+      >
+        <h1>Please choose your crew first!</h1>
+      </Stack>
+    )
   }
   const handleButtonClick = () => {
     const scriptInput = scriptInputRef.current.value;
@@ -51,7 +63,7 @@ function DesignPage() {
       state: { scriptText: scriptInput, titleText: titleInput },
     });
   };
-
+  
   return (
     <Stack
       style={{ marginTop: "30px", marginLeft: "50px", marginRight: "50px" }}
