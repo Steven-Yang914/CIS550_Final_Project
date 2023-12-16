@@ -29,7 +29,6 @@ function PersonInfoPage() {
                 data = await response.json();
                 setRelatedMovies(data);
             } catch (err) {
-                console.error("Error fetching data:", err);
                 setError(err);
             } finally {
                 setIsLoading(false);

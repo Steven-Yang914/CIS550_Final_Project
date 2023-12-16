@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Container, Divider } from '@mui/material';
 import TopMoviesTable from '../components/TopMoviesTable';
-import { NavLink } from 'react-router-dom';
+import LinkWithCrewInfo from '../components/LinkWithCrewInfo';
 
 const config = require('../config.json');
 
@@ -19,9 +19,9 @@ export default function HomePage() {
       <div style={{ display: 'flex'}}>
         <h2>
           Movie of the day:&nbsp;
-          <NavLink to={`/movie/${randomMovie.MovieID}`} style={{ textDecoration: 'none' }}>
+          <LinkWithCrewInfo to={`/movie/${randomMovie.MovieID}`} style={{ textDecoration: 'none' }}>
             {randomMovie.PrimaryTitle}
-          </NavLink>
+          </LinkWithCrewInfo>
         </h2>
       </div>
 
