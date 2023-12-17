@@ -2,6 +2,7 @@
 
 import React from 'react';
 
+// This context is used in the SearchPage component to store global variables
 const SearchContext = React.createContext({
     results: [],
     setResults: () => {},

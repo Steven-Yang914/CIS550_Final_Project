@@ -3,6 +3,7 @@ import {FaSearch} from "react-icons/fa";
 import {Button} from "@mui/material";
 import SearchContext from "./SearchContext";
 
+// This component is for toggling between "Movie" and "Person" search types
 function SearchTypeButton(props) {
     const {searchType, setSearchType, setResults} = useContext(SearchContext);
 

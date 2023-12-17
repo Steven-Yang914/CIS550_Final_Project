@@ -9,6 +9,8 @@ import EnhancedTable from "../components/EnhancedTable";
 
 const config = require("../config.json");
 
+
+// Code for the design page
 function DesignPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const peopleIDs = searchParams.get("chosen-crew");
@@ -18,6 +20,7 @@ function DesignPage() {
   const scriptInputRef = useRef();
   const titleInputRef = useRef();
 
+  // get people info
   useEffect(() => {
     const fetchActorNames = async () => {
       let peopleIDList;
@@ -56,6 +59,7 @@ function DesignPage() {
       </Stack>
     )
   }
+  // handle button click for result generation
   const handleButtonClick = () => {
     const scriptInput = scriptInputRef.current.value;
     const titleInput = titleInputRef.current.value;

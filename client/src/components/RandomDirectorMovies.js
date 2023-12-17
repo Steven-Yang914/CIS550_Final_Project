@@ -9,6 +9,7 @@ import LinkWithCrewInfo from "./LinkWithCrewInfo";
 
 const config = require('../config.json');
 
+// Get movies by the random director
 function RandomDirectorMovies() {
     const [movies, setMovies] = useState([]);
     const [director, setDirector] = useState({});

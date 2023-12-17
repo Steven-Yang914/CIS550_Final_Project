@@ -16,6 +16,7 @@ import LinkWithCrewInfo from "../components/LinkWithCrewInfo";
 
 const config = require("../config.json");
 
+// Code for the result page
 function ResultPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [rows, setRows] = useState([]);
@@ -27,6 +28,7 @@ function ResultPage() {
   const scriptText = location.state?.scriptText || "";
   const titleText = location.state?.titleText || "";
 
+  // get collaborations data
   useEffect(() => {
     fetch(
       `http://${config.server_host}:${config.server_port}/result/collaboration-summary/?peopleIDs=${peopleIDs}`
@@ -37,6 +39,7 @@ function ResultPage() {
       });
   }, [peopleIDs]);
 
+  // get people info
   useEffect(() => {
     const fetchActorNames = async () => {
       const peopleIDList = peopleIDs.split(",");

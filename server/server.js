@@ -8,6 +8,7 @@ app.use(cors({
   origin: '*',
 }));
 
+// API routes
 app.get('/random', routes.random);
 app.get('/allMovies', routes.allMovies);
 app.get('/movie/:movie_id', routes.movie);

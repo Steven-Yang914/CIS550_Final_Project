@@ -521,14 +521,22 @@ const topMoviesByGenre = async function (req, res) {
 
   if(!page){
       connection.query(`
-            SELECT r.AverageRating, mrr.Genre as genre,  mm.*, ps.PosterURL, p.name as director
-            FROM  Ratings r
-                      JOIN Max_rating_genre mrr on r.AverageRating = mrr.MaxAvgRating
-                      JOIN Movies mm on mm.MovieID = r.MovieID
-                      JOIN Crew_in ci on mm.MovieID = ci.MovieID
-                      JOIN People p on ci.PeopleID = p.PeopleID
-                      LEFT JOIN Posters ps on mm.MovieID = ps.MovieID
-            WHERE ci.Job = 'director'
+          WITH MovieMaxR as (
+              SELECT rr.AverageRating, mrr.Genre,  mm.*
+              FROM Ratings rr JOIN Max_rating_genre mrr
+                                   on rr.AverageRating = mrr.MaxAvgRating
+                              JOIN Movies mm on mm.MovieID = rr.MovieID
+          ),
+               Director as (
+                   SELECT ppp.*, ciii.Job, ciii.MovieID
+                   FROM People ppp JOIN Crew_in ciii
+                                        on ppp.PeopleID = ciii.PeopleID
+                   WHERE ciii.Job = 'director'
+               )
+          SELECT mmr.*, d.Name as director, p.PosterURL
+          FROM MovieMaxR mmr
+                   JOIN Director d on mmr.MovieID = d.MovieID
+                   LEFT JOIN Posters p on d.MovieID = p.MovieID;
           `, (err, data) => {
               if (err || data.length === 0) {
                   console.log(err);
@@ -539,15 +547,22 @@ const topMoviesByGenre = async function (req, res) {
           });
   } else {
       connection.query(`
-            SELECT r.AverageRating, mrr.Genre as genre,  mm.*, ps.PosterURL, p.name as director
-            FROM  Ratings r
-                      JOIN Max_rating_genre mrr on r.AverageRating = mrr.MaxAvgRating
-                      JOIN Movies mm on mm.MovieID = r.MovieID
-                      JOIN Crew_in ci on mm.MovieID = ci.MovieID
-                      JOIN People p on ci.PeopleID = p.PeopleID
-                      LEFT JOIN Posters ps on mm.MovieID = ps.MovieID
-            WHERE ci.Job = 'director'
-            LIMIT ${pageSize} OFFSET ${(page - 1) * pageSize};
+          WITH MovieMaxR as (
+              SELECT rr.AverageRating, mrr.Genre,  mm.*
+              FROM Ratings rr JOIN Max_rating_genre mrr
+                                   on rr.AverageRating = mrr.MaxAvgRating
+                              JOIN Movies mm on mm.MovieID = rr.MovieID
+          ),
+               Director as (
+                   SELECT ppp.*, ciii.Job, ciii.MovieID
+                   FROM People ppp JOIN Crew_in ciii
+                                        on ppp.PeopleID = ciii.PeopleID
+                   WHERE ciii.Job = 'director'
+               )
+          SELECT mmr.*, d.Name as director, p.PosterURL
+          FROM MovieMaxR mmr
+                   JOIN Director d on mmr.MovieID = d.MovieID
+                   LEFT JOIN Posters p on d.MovieID = p.MovieID;
           `, (err, data) => {
               if (err || data.length === 0) {
                   console.log(err);

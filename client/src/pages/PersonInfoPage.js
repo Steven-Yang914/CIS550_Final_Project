@@ -7,6 +7,8 @@ import { useNavigate } from 'react-router-dom';
 
 const config = require('../config.json');
 
+
+// Code for the person info page
 function PersonInfoPage() {
     const { person_id } = useParams();
     const [personInfo, setPersonInfo] = useState({});

@@ -10,6 +10,7 @@ import {FaSearch} from "react-icons/fa";
 import "./SearchPage.css";
 import SearchTypeButton from "../components/SearchTypeButton";
 
+// Code for the search page
 function SearchPage() {
     const location = useLocation();
     const params = new URLSearchParams(location.search);
@@ -18,6 +19,7 @@ function SearchPage() {
     const {searchType, setSearchType} = useContext(SearchContext);
     const [condition, setCondition] = useState(0);
 
+    // Signal to the SearchResultsTable that the search results have changed
     const startSearch = () => {
         if (input) {
             setIsLoading(true);

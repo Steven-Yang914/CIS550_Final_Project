@@ -48,6 +48,7 @@ function EnhancedTable(props) {
   const [rows, setRows] = useState([]);
   const [isDataFetched, setIsDataFetched] = useState(false);
 
+  // code for the enhanced table
   function EnhancedTableHead(props) {
     const { onSelectAllClick, numSelected, rowCount } = props;
 

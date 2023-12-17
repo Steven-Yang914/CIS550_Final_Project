@@ -5,6 +5,7 @@ import LinkWithCrewInfo from '../components/LinkWithCrewInfo';
 
 const config = require('../config.json');
 
+// Code for the movie info page
 function MovieInfoPage() {
   const { movie_id } = useParams();
   const [movieInfo, setMovieInfo] = useState(null);

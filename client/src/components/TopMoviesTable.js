@@ -6,11 +6,13 @@ import LinkWithCrewInfo from "./LinkWithCrewInfo";
 
 const config = require('../config.json');
 
+// Get movies by the random director
 function TopMoviesTable() {
   const [topMovies, setTopMovies] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const moviesPerPage = useRef(12);
 
+  // fetch data from backend
   useEffect(() => {
     fetch(`http://${config.server_host}:${config.server_port}/topMovies?page=${currentPage}&page_size=${moviesPerPage.current}`)
       .then(res => res.json())

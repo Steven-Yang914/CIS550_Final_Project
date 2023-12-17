@@ -5,8 +5,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="06ffdec5-2264-4e1b-8c2b-7b991deab77a" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/EnhancedTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/EnhancedTable.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/OverTwoAdultTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/OverTwoAdultTable.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/RandomDirectorMovies.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/RandomDirectorMovies.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/SearchContext.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/SearchContext.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/SearchProvider.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/SearchProvider.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/SearchResultsTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/SearchResultsTable.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/SearchTypeButton.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/SearchTypeButton.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/TopAvgRateMoviesTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/TopAvgRateMoviesTable.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/TopMoviesTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/TopMoviesTable.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/pages/DesignPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/DesignPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/pages/HomePage.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/HomePage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/pages/MovieInfoPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/MovieInfoPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/pages/PersonInfoPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/PersonInfoPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/pages/ResultPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/ResultPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/pages/SearchPage.css" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/SearchPage.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/pages/SearchPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/SearchPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/pages/SearchResultPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/routes.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/routes.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/server.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,21 +78,6 @@
     ]
   }
 }</component>
-  <component name="RunManager">
-    <configuration default="true" type="JetRunConfigurationType">
-      <module name="CIS550_Final_Project" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
-      <module name="CIS550_Final_Project" />
-      <option name="filePath" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -88,6 +91,7 @@
       <workItem from="1702493710917" duration="37237000" />
       <workItem from="1702581828544" duration="333000" />
       <workItem from="1702582201524" duration="74000" />
+      <workItem from="1702774981590" duration="1281000" />
     </task>
     <servers />
   </component>

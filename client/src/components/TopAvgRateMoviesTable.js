@@ -9,11 +9,13 @@ import LinkWithCrewInfo from "./LinkWithCrewInfo";
 
 const config = require('../config.json');
 
+// Get top rated movies by genre
 function TopAvgRateMoviesTable() {
     const [topMoviesByGenre, setTopMoviesByGenre] = useState([]);
     const { currentPage, setCurrentPage} = useContext(SearchContext);
     const moviesPerPage = useRef(20);
 
+    // fetch data from backend
     useEffect(() => {
         fetch(`http://${config.server_host}:${config.server_port}/genre/top-movies?page=${currentPage}&page_size=${moviesPerPage.current}`)
             .then(res => res.json())

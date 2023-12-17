@@ -7,11 +7,13 @@ import SearchContext from './SearchContext';
 
 const config = require('../config.json');
 
+// Get actors acted in more than 2 adult movies
 function OverTwoAdultTable() {
     const [ActorMoreThan2Adult, setActorMoreThan2Adult] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const {moviesPerPage } = useContext(SearchContext);
 
+    // fetch data from backend
     useEffect(() => {
         fetch(`http://${config.server_host}:${config.server_port}/overTwoAdult?page=${currentPage}&page_size=${moviesPerPage.current}`)
             .then(res => res.json())

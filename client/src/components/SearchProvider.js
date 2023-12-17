@@ -3,6 +3,7 @@
 import React, {useRef, useState} from 'react';
 import SearchContext from './SearchContext';
 
+// This component provides a context for the search function. It is used in the SearchPage component.
 export const SearchProvider = ({ children }) => {
     const [results, setResults] = useState([]);
     const [isLoading, setIsLoading] = useState(false);

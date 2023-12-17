@@ -5,6 +5,7 @@ import LinkWithCrewInfo from '../components/LinkWithCrewInfo';
 
 const config = require('../config.json');
 
+// Code for the home page
 export default function HomePage() {
   const [randomMovie, setRandomMovie] = useState({});
 

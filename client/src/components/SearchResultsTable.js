@@ -6,12 +6,13 @@ import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import config from "../config.json";
 import LinkWithCrewInfo from "./LinkWithCrewInfo";
 
+// Get movies by the random director
 function SearchResultsTable({ searchTerm, searchDataType }) {
     const { isLoading, setIsLoading, results,
         setResults, setSearched, moviesPerPage } = useContext(SearchContext);
     const {currentPage, setCurrentPage, clickNum} = useContext(SearchContext);
-    // const moviesPerPage = useRef(12)
 
+    // fetch movies by the search term
     useEffect(() => {
         if (searchTerm) {
             setIsLoading(true);
